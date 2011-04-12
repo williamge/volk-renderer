@@ -1,0 +1,48 @@
+using System;
+using System.Drawing;
+using OpenTK;
+namespace volkrenderer
+{
+	public class Sphere : Primitive
+	{
+		Color colour;
+		Vector3d center;
+		int radius;
+		
+		public Sphere (Color colour0, Vector3d center0, int radius0)
+		{
+			colour = colour0;
+			center = center0;
+			radius = radius0;
+		}
+		
+		public double intersect (Vector3d d0, Vector3d d1)
+		{
+			//assuming ray d is a unit vector from origin (0,0,-5) to a direction
+			
+			Vector3d v = d0 - center;
+			
+			double t, t2;
+			
+			t2 = Math.Pow (Vector3d.Dot (v, d1), 2) - (Vector3d.Dot (v, v) - Math.Pow (radius, 2));
+			
+			if (t2 < 0) {
+				return -1;
+			}
+			
+			t2 = Math.Sqrt (t2);
+			t = -Vector3d.Dot (v, d1);
+			t = Math.Max (t + t2, t - t2);
+			
+			return t;
+		
+			
+		}
+		
+		public Color getColour ()
+		{
+			return colour;
+		}
+	}
+}
+

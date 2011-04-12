@@ -1,0 +1,2 @@
+objc[47726]: Class DOMHTMLParamElement is implemented in both /System/Library/Frameworks/WebKit.framework/Versions/A/Frameworks/WebCore.framework/Versions/A/WebCore and /Library/InputManagers/SafariBlock/SafariBlock.bundle/Contents/MacOS/SafariBlock. One of the two will be used. Which one is undefined.
+objc[47726]: Class WebBaseNetscapePluginView is implemented in both /System/Library/Frameworks/WebKit.framework/Versions/A/WebKit and /Library/InputManagers/SafariBlock/SafariBlock.bundle/Contents/MacOS/SafariBlock. One of the two will be used. Which one is undefined.
