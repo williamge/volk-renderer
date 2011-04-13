@@ -30,6 +30,13 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Console|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Console</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>CONSFLAG</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -63,11 +70,12 @@
       <DependentUpon>MainMenu.xib</DependentUpon>
     </Compile>
     <Compile Include="raytrace\raytrace.cs" />
-    <Compile Include="sphereTest.cs" />
     <Compile Include="scene\scene.cs" />
     <Compile Include="scene\primitives\Primitive.cs" />
     <Compile Include="scene\primitives\Sphere.cs" />
     <Compile Include="scene\primitives\Plane.cs" />
+    <Compile Include="scene\lights\PointLight.cs" />
+    <Compile Include="scene\lights\Light.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainWindow.xib" />
@@ -81,5 +89,6 @@
   <ItemGroup>
     <Folder Include="raytrace\" />
     <Folder Include="scene\primitives\" />
+    <Folder Include="scene\lights\" />
   </ItemGroup>
 </Project>

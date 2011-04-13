@@ -31,17 +31,35 @@ namespace volkrenderer
 			}
 			
 			t2 = Math.Sqrt (t2);
-			t = -Vector3d.Dot (v, d1);
-			t = Math.Max (t + t2, t - t2);
+			t = - Vector3d.Dot (v, d1);
+			t = Math.Min (t + t2, t - t2);
 			
 			return t;
 		
 			
 		}
 		
-		public Color getColour ()
+		//probably should check if 'point' is actually on the sphere but who cares at this point.
+		public Vector3d normal (Vector3d point)
+		{
+			Vector3d N = point - center;
+			N.Normalize ();
+			return N;
+		}
+		
+		public Color getColour (Vector3d p)
 		{
 			return colour;
+		}
+		
+		public double getDiffuse ()
+		{
+			return (1.0 / 3.0);
+		}
+		
+		public double getSpecular ()
+		{
+			return (1.0 / 3.0);
 		}
 	}
 }

@@ -21,7 +21,7 @@ namespace volkrenderer
 			return points;
 		}
 		
-		public Color getColour (Vector3d p_)
+		public Color getColour ()
 		{
 			return colour;
 		}

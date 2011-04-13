@@ -6,11 +6,12 @@ namespace volkrenderer
 	public interface Primitive
 	{
 		double intersect(Vector3d d0, Vector3d d1);
+		Vector3d normal (Vector3d point);
 		
-		Color getColour();
+		Color getColour(Vector3d p);
 		
-		//getDiffuse();
-		//getSpecular();
+		double getDiffuse();
+		double getSpecular();
 	}
 }
 

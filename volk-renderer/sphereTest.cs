@@ -12,7 +12,7 @@ namespace volkrenderer
 		{
 
 			Sphere testSp = new Sphere (Color.FromName ("SlateBlue"), new Vector3d (0, 0, 20), 3);
-			double result = testSp.intersect (new Vector3d (0, 0, 1));
+			double result = testSp.intersect (new Vector3d(0,0,-480),new Vector3d (0, 0, 1));
 			//i have no idea what this should be, fix it.
 			Assert.AreEqual (0.0f,result);
 		}
