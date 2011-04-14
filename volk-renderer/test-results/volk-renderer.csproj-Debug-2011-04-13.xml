@@ -37,6 +37,24 @@
       <Time />
       <Message>Has no TestFixtures</Message>
     </UnitTestResult>
+    <UnitTestResult>
+      <TestDate>2011-04-13T23:02:03</TestDate>
+      <Status>Ignored</Status>
+      <TotalFailures>0</TotalFailures>
+      <TotalSuccess>0</TotalSuccess>
+      <TotalIgnored>0</TotalIgnored>
+      <Time />
+      <Message>Has no TestFixtures</Message>
+    </UnitTestResult>
+    <UnitTestResult>
+      <TestDate>2011-04-13T23:02:22</TestDate>
+      <Status>Ignored</Status>
+      <TotalFailures>0</TotalFailures>
+      <TotalSuccess>0</TotalSuccess>
+      <TotalIgnored>0</TotalIgnored>
+      <Time />
+      <Message>Has no TestFixtures</Message>
+    </UnitTestResult>
   </Results>
   <Tests>
     <TestRecord Name="volkrenderer">
@@ -124,6 +142,7 @@
                   <ConsoleError />
                 </UnitTestResult>
               </Results>
+              <Tests />
             </TestRecord>
           </Tests>
         </TestRecord>

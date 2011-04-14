@@ -17,6 +17,13 @@ namespace volkrenderer
 			ImageHeight = height_;
 		}
 		
+		public bool addPrim (Primitive p_)
+		
+		{
+			prims.Add (p_);
+			return true;
+		}
+		
 		public bool addSphere (Vector3d center, int radius, Color colour)
 		{
 			if (radius < 0) 
