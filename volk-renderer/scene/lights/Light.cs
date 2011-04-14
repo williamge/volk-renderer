@@ -11,6 +11,8 @@ namespace volkrenderer
 		
 		List<Vector3d> getPoints();
 		
+		double getIntensity();
+		
 		
 
 	}

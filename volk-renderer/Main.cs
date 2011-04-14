@@ -15,9 +15,9 @@ namespace volkrenderer
 		{
 #if CONSFLAG
 			vScene vs = new vScene (640, 480);
-			vs.addSphere (new Vector3d (0, 0, 15), 80, Color.Blue);
-			vs.addPointLight (new Vector3d (80, 120, 0), Color.White);
-			vs.addPlane(new Vector3d(0,-250,0),new Vector3d(0,1,0),Color.Red);
+			vs.addSphere (new Vector3d (0, 0, 100), 90, Color.Blue);
+			vs.addPointLight (new Vector3d (-120, 120, 0), Color.White, 1.0);
+			vs.addPlane (new Vector3d (0, -100, -480), new Vector3d (0, 1, 0), Color.Red);
 			new raytrace (vs);
 #else
 			NSApplication.Init ();

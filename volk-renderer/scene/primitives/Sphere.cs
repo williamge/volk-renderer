@@ -18,7 +18,7 @@ namespace volkrenderer
 		
 		public double intersect (Vector3d d0, Vector3d d1)
 		{
-			//assuming ray d is a unit vector from origin (0,0,-5) to a direction
+			
 			
 			Vector3d v = d0 - center;
 			
@@ -60,6 +60,11 @@ namespace volkrenderer
 		public double getSpecular ()
 		{
 			return (1.0 / 3.0);
+		}
+		
+		public double getTransparency ()
+		{
+			return 0.0;
 		}
 	}
 }

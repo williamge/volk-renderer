@@ -40,6 +40,12 @@ namespace volkrenderer
 			return true;
 		}
 		
+		public bool addPointLight (Vector3d p_, Color col_, double t_)
+		{
+			lights.Add (new PointLight (p_, col_,t_));
+			return true;
+		}
+		
 		public List<Primitive> getPrims ()
 		{
 			return prims;

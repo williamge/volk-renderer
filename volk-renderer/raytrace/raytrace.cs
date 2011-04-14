@@ -26,6 +26,7 @@ namespace volkrenderer
 		
 			//just testing so far
 			im.Save ("/Users/william/Dropbox/repos/volk-rend-csharp/volk-renderer/volk-renderer/bin/test.jpg");
+			im.Save ("/Users/william/Dropbox/Public/test.jpg");
 		}
 		
 		Color trace (Vector3d origin, Vector3d direction, vScene scene)
@@ -34,7 +35,7 @@ namespace volkrenderer
 			
 			//closest t so far
 			double ct = 0.0;
-			Primitive cobject;
+			Primitive cobject = null;
 			
 			//loop through all objects in scene.
 			foreach (Primitive pr in scene.getPrims ()) {
@@ -54,8 +55,7 @@ namespace volkrenderer
 			if (ct > 0.0) {
 				Vector3d intersectp = origin + direction * ct;
 				
-				//diffuse only for now
-				Color pcol = Color.Black;
+				Color pcol;
 				int pcolr, pcolg, pcolb;
 				pcolr = pcolg = pcolb = 0;
 				
@@ -65,21 +65,29 @@ namespace volkrenderer
 						Vector3d L = Lp - intersectp;
 						L.Normalize ();
 						//Vector3d testn = cobject.normal (intersectp);
-						double dot = Vector3d.Dot (L, cobject.normal(intersectp));
+						double dot = Vector3d.Dot (L, cobject.normal (intersectp));
 						if (dot > 0) {
 							
+							double shade = shadowCheck (intersectp, Lp, scene, cobject);
+							
 							//diffuse multiplier
-							double diff = cobject.getDiffuse () * dot;
+							double diff = li.getIntensity () * cobject.getDiffuse () * dot;
 							//reflected ray off primitive
 							Vector3d R = (2 * dot * cobject.normal (intersectp)) - L;
 							//specular multiplier
-							double spec = cobject.getSpecular () * Math.Pow (Vector3d.Dot (R, direction), 20);
+							double spec = li.getIntensity () * cobject.getSpecular () * Math.Pow (Vector3d.Dot (R, direction), 20);
 							
-							pcolr += (int)(diff * cobject.getColour (intersectp).R + spec * li.getColour ().R);
+							pcolr += (int)(shade * 
+								(diff * cobject.getColour (intersectp).R 
+									+ spec * li.getColour ().R));
 							
-							pcolg += (int)(diff * cobject.getColour (intersectp).G + spec * li.getColour ().G);
+							pcolg += (int)(shade * 
+								(diff * cobject.getColour (intersectp).G 
+									+ spec * li.getColour ().G));
 							
-							pcolb += (int)(diff * cobject.getColour (intersectp).B + spec * li.getColour ().B);
+							pcolb += (int)(shade * 
+								(diff * cobject.getColour (intersectp).B 
+									+ spec * li.getColour ().B));
 						}
 						
 						
@@ -111,12 +119,44 @@ namespace volkrenderer
 				//should probably add some actual lighting
 				//im.SetPixel (x, y, cobject.getColour(origin + direction*ct));
 				//
-				
+			
 			} else {
 				//placeholder colour, should be black when ready.
 				return Color.HotPink;
 			}
 		}
+		
+		
+		private double shadowCheck (Vector3d p, Vector3d Lp, vScene scene, Primitive cobject)
+		{
+			double shade = 1.0;
+			Vector3d L = Lp - p;
+			L.Normalize();
+			
+			foreach (Primitive spr in scene.getPrims ())
+			{
+				if (spr != cobject) 
+				{
+					double objintersect = spr.intersect (p, L);
+					if (objintersect > 0.000001) 
+					{
+						double objtrans = spr.getTransparency ();
+						if (objtrans == 0) 
+						{
+							shade = shade / 2;
+						}
+						else{
+							shade = Math.Min(1.0, shade / objtrans);
+						}
+						
+					}
+				}
+			}
+			return shade;
+		}
+		
 	}
+	
+	
 }
 

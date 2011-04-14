@@ -54,6 +54,11 @@ namespace volkrenderer
 		{
 			return 0.0;
 		}
+		
+		public double getTransparency ()
+		{
+			return 0.0;
+		}
 	}
 }
 
