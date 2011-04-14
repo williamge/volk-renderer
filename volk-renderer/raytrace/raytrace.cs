@@ -29,14 +29,10 @@ namespace volkrenderer
 					dir2.Normalize ();
 					dir3.Normalize ();
 					dir4.Normalize ();
-					
-					int l = 0;
-					if(x==418 && y==317){
-						l =2;
-					}
+				
 					
 					Color pix1 = trace (origin, dir1, scene,0);
-					Color pix2 = trace (origin, dir2, scene,0+l);
+					Color pix2 = trace (origin, dir2, scene,0);
 					Color pix3 = trace (origin, dir3, scene,0);
 					Color pix4 = trace (origin, dir4, scene,0);
 					
@@ -96,11 +92,6 @@ namespace volkrenderer
 			
 			//ready to do lighting
 			
-			if (rdepth == 2)
-			{
-				rdepth = rdepth;
-			}
-			
 			if (ct > 0.0) {
 				Vector3d intersectp = origin + direction * ct;
 				
@@ -111,19 +102,12 @@ namespace volkrenderer
 				
 				foreach (Light li in scene.getLights ()) {
 					foreach (Vector3d Lp in li.getPoints ()) {
-						if (rdepth == 2) {
-							rdepth = rdepth;
-						}
 						
 						Vector3d L = Lp - intersectp;
 						L.Normalize ();
 						//Vector3d testn = cobject.normal (intersectp);
 						double dot = Vector3d.Dot (L, cobject.normal (intersectp));
 						if (dot > 0) {
-							
-							if (rdepth == 2) {
-								rdepth = rdepth;
-							}
 							
 							double shade = shadowCheck (intersectp, Lp, scene, cobject);
 							
@@ -146,9 +130,6 @@ namespace volkrenderer
 								(diff * cobject.getColour (intersectp).B 
 									+ spec * li.getColour ().B));
 							
-							if (rdepth == 2) {
-								rdepth = rdepth;
-							}
 						}
 						
 						
@@ -167,10 +148,6 @@ namespace volkrenderer
 				pcolr += (int)(ambient * cobject.getColour (intersectp).R);
 				pcolg += (int)(ambient * cobject.getColour (intersectp).G);
 				pcolb += (int)(ambient * cobject.getColour (intersectp).B);
-				
-				if (rdepth == 2) {
-					rdepth = rdepth;
-				}
 				
 				//reflection
 				if (cobject.getReflect () > 0) {
@@ -215,12 +192,12 @@ namespace volkrenderer
 					if (objintersect > 0.000001) 
 					{
 						double objtrans = spr.getTransparency ();
-						if (objtrans == 0) 
+						if (objtrans == 0.0) 
 						{
-							//shade = shade / 2;
+							shade = shade / 2.0;
 						}
 						else{
-							//shade = Math.Min(1.0, shade / objtrans);
+							shade = Math.Min(1.0, shade / objtrans);
 						}
 						
 					}
