@@ -59,6 +59,12 @@ namespace volkrenderer
 		{
 			return 0.0;
 		}
+		
+		public double getReflect ()
+		
+		{
+			return 0.0;
+		}
 	}
 }
 

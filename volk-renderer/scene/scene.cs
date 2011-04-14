@@ -26,6 +26,16 @@ namespace volkrenderer
 			prims.Add (new Sphere (colour, center, radius));
 			return true;
 		}
+		
+		public bool addSphere (Vector3d center, int radius, Color colour,double reflectd_)
+		{
+			if (radius < 0) {
+				return false;
+			}
+			prims.Add (new Sphere (colour, center, radius,reflectd_));
+			return true;
+		}
+		
 		public bool addPlane (Vector3d point, Vector3d normal, Color colour)
 
 		{
@@ -55,6 +65,11 @@ namespace volkrenderer
 		
 		{
 			return lights;
+		}
+		
+		public Color getBack ()
+		{
+			return Color.HotPink;
 		}
 		
 	}

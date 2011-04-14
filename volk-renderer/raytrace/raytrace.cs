@@ -10,15 +10,50 @@ namespace volkrenderer
 		public raytrace (vScene scene)
 		{
 			im = new Bitmap (scene.ImageWidth, scene.ImageHeight);
-			Vector3d origin = new Vector3d (0, 0, -scene.ImageHeight);
+			Vector3d origin = new Vector3d (0, 0, - scene.ImageHeight);
 			
 			
 			for (int x = 0; x < im.Width; x++) {
 				for (int y = 0; y < im.Height; y++) {
-					Vector3d direction = new Vector3d (x - im.Width / 2, -(y - im.Height / 2), 0);
+					Vector3d direction = new Vector3d (x - im.Width / 2, -(y - im.Height / 2), scene.ImageHeight);
 					direction = direction - origin;
-					direction.Normalize ();
-					Color pixcol = trace(origin,direction,scene);
+					
+				
+					
+					Vector3d dir1 = direction + new Vector3d (-0.5, 0.5, 0);
+					Vector3d dir2 = direction + new Vector3d (-0.5, -0.5, 0);
+					Vector3d dir3 = direction + new Vector3d (0.5, 0.5, 0);
+					Vector3d dir4 = direction + new Vector3d (0.5, -0.5, 0);
+					
+					dir1.Normalize ();
+					dir2.Normalize ();
+					dir3.Normalize ();
+					dir4.Normalize ();
+					
+					Color pix1 = trace (origin, dir1, scene,0);
+					Color pix2 = trace (origin, dir2, scene,0);
+					Color pix3 = trace (origin, dir3, scene,0);
+					Color pix4 = trace (origin, dir4, scene,0);
+					
+					Color pixcol = Color.FromArgb(
+						(int)((.25 * pix1.R)
+							+(.25 * pix2.R)
+							+(.25 * pix3.R)
+							+(.25 * pix4.R)),
+						(int)((.25 * pix1.G)
+							+(.25 * pix2.G)
+							+(.25 * pix3.G)
+							+(.25 * pix4.G)),
+						(int)((.25 * pix1.B)
+							+(.25 * pix2.B)
+							+(.25 * pix3.B)
+							+(.25 * pix4.B))
+						);
+					
+					
+					
+					//direction.Normalize ();
+					//Color pixcol = trace(origin,direction,scene,0);
 					im.SetPixel(x,y,pixcol);
 					
 				}
@@ -29,8 +64,11 @@ namespace volkrenderer
 			im.Save ("/Users/william/Dropbox/Public/test.jpg");
 		}
 		
-		Color trace (Vector3d origin, Vector3d direction, vScene scene)
+		Color trace (Vector3d origin, Vector3d direction, vScene scene, int rdepth)
 		{
+			
+			if (rdepth > 4) {
+				return Color.Black;}
 
 			
 			//closest t so far
@@ -107,6 +145,15 @@ namespace volkrenderer
 				pcolg += (int)(ambient * cobject.getColour (intersectp).G);
 				pcolb += (int)(ambient * cobject.getColour (intersectp).B);
 				
+				//reflection
+				if (cobject.getReflect () > 0) {
+					Color rcol = trace (intersectp, cobject.normal (intersectp), scene, rdepth+1);
+					pcolr += (int)(cobject.getReflect () * rcol.R);
+					pcolg += (int)(cobject.getReflect () * rcol.G);
+					pcolb += (int)(cobject.getReflect () * rcol.B);
+				}
+				
+				
 				pcolr = Math.Max (Math.Min (255, pcolr), 0);
 				pcolg = Math.Max (Math.Min (255, pcolg), 0);
 				pcolb = Math.Max (Math.Min (255, pcolb), 0);
@@ -122,7 +169,7 @@ namespace volkrenderer
 			
 			} else {
 				//placeholder colour, should be black when ready.
-				return Color.HotPink;
+				return scene.getBack();
 			}
 		}
 		

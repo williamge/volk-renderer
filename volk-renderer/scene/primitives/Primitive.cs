@@ -12,7 +12,8 @@ namespace volkrenderer
 		
 		double getDiffuse();
 		double getSpecular();
-		double getTransparency ();
+		double getTransparency ();		
+		double getReflect();
 	}
 }
 

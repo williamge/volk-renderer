@@ -8,12 +8,22 @@ namespace volkrenderer
 		Color colour;
 		Vector3d center;
 		int radius;
+		double reflectd;
 		
 		public Sphere (Color colour0, Vector3d center0, int radius0)
 		{
 			colour = colour0;
 			center = center0;
 			radius = radius0;
+			reflectd = 0.0;
+		}
+		
+		public Sphere (Color colour0, Vector3d center0, int radius0, double reflectd_)
+		{
+			colour = colour0;
+			center = center0;
+			radius = radius0;
+			reflectd = reflectd_;
 		}
 		
 		public double intersect (Vector3d d0, Vector3d d1)
@@ -65,6 +75,12 @@ namespace volkrenderer
 		public double getTransparency ()
 		{
 			return 0.0;
+		}
+		
+		public double getReflect ()
+		
+		{
+			return reflectd;
 		}
 	}
 }

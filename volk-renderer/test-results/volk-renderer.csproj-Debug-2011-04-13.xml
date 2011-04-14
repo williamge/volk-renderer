@@ -28,6 +28,15 @@
       <Time />
       <Message>Has no TestFixtures</Message>
     </UnitTestResult>
+    <UnitTestResult>
+      <TestDate>2011-04-13T20:57:04</TestDate>
+      <Status>Ignored</Status>
+      <TotalFailures>0</TotalFailures>
+      <TotalSuccess>0</TotalSuccess>
+      <TotalIgnored>0</TotalIgnored>
+      <Time />
+      <Message>Has no TestFixtures</Message>
+    </UnitTestResult>
   </Results>
   <Tests>
     <TestRecord Name="volkrenderer">
