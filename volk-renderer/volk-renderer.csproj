@@ -76,6 +76,7 @@
     <Compile Include="scene\primitives\Plane.cs" />
     <Compile Include="scene\lights\PointLight.cs" />
     <Compile Include="scene\lights\Light.cs" />
+    <Compile Include="scene\primitives\LightSphere.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainWindow.xib" />

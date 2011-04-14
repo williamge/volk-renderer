@@ -96,65 +96,68 @@ namespace volkrenderer
 				Vector3d intersectp = origin + direction * ct;
 				
 				Color pcol;
-				int pcolr, pcolg, pcolb;
-				pcolr = pcolg = pcolb = 0;
+				double pcolr, pcolg, pcolb;
+				pcolr = pcolg = pcolb = 0.0;
+				
+				if (cobject.isLight ()) 
+				{
+					return cobject.getColour (intersectp);
+				}
 				
 				
 				foreach (Light li in scene.getLights ()) {
-					foreach (Vector3d Lp in li.getPoints ()) {
+					Vector3d Lp = li.getPoint ();
+					
+					Vector3d L = Lp - intersectp;
+					L.Normalize ();
+					//Vector3d testn = cobject.normal (intersectp);
+					double dot = Vector3d.Dot (L, cobject.normal (intersectp));
+					if (dot > 0) {
 						
-						Vector3d L = Lp - intersectp;
-						L.Normalize ();
-						//Vector3d testn = cobject.normal (intersectp);
-						double dot = Vector3d.Dot (L, cobject.normal (intersectp));
-						if (dot > 0) {
-							
-							double shade = shadowCheck (intersectp, Lp, scene, cobject);
-							
+							double shade = shadowCheck (intersectp, li, scene, cobject);
+						
 							//diffuse multiplier
-							double diff = li.getIntensity () * cobject.getDiffuse () * dot;
-							//reflected ray off primitive
-							Vector3d R = (2 * dot * cobject.normal (intersectp)) - L;
-							//specular multiplier
-							double spec = li.getIntensity () * cobject.getSpecular () * Math.Pow (Vector3d.Dot (R, direction), 20);
-							
-							pcolr += (int)(shade * 
+						double diff = li.getIntensity () * cobject.getDiffuse () * dot;
+						//reflected ray off primitive
+						Vector3d R = (2.0 * dot * cobject.normal (intersectp)) - L;
+						//specular multiplier
+						double spec = li.getIntensity () * cobject.getSpecular () * Math.Pow (Vector3d.Dot (R, direction), 20);
+						
+							pcolr += (shade * 
 								(diff * cobject.getColour (intersectp).R 
 									+ spec * li.getColour ().R));
-							
-							pcolg += (int)(shade * 
+						
+							pcolg += (shade * 
 								(diff * cobject.getColour (intersectp).G 
 									+ spec * li.getColour ().G));
-							
-							pcolb += (int)(shade * 
+						
+							pcolb += (shade * 
 								(diff * cobject.getColour (intersectp).B 
 									+ spec * li.getColour ().B));
-							
-						}
-						
-						
-						
-						
-						
-						
-						
-						//at some point do some shadows
+					
 					}
 				
 				}
 				//ambient lighting 
-				double ambient = (1.0 / 3.0);
+				double ambient = cobject.getAmbient ();
+				//double ambient = 1.0 / 3.0;
 				
-				pcolr += (int)(ambient * cobject.getColour (intersectp).R);
-				pcolg += (int)(ambient * cobject.getColour (intersectp).G);
-				pcolb += (int)(ambient * cobject.getColour (intersectp).B);
+				pcolr += (ambient * cobject.getColour (intersectp).R);
+				pcolg += (ambient * cobject.getColour (intersectp).G);
+				pcolb += (ambient * cobject.getColour (intersectp).B);
 				
 				//reflection
 				if (cobject.getReflect () > 0) {
-					Color rcol = trace (intersectp, cobject.normal (intersectp), scene, rdepth+1);
-					pcolr += (int)(cobject.getReflect () * rcol.R);
-					pcolg += (int)(cobject.getReflect () * rcol.G);
-					pcolb += (int)(cobject.getReflect () * rcol.B);
+					
+					Vector3d N = cobject.normal (intersectp);
+					Vector3d reflectray = direction - (2.0 * (Vector3d.Dot (N, direction))) * N;
+					reflectray.Normalize ();
+					
+					Color rcol = trace (intersectp, reflectray,
+										scene, rdepth+1);
+					pcolr += (cobject.getReflect () * rcol.R);
+					pcolg += (cobject.getReflect () * rcol.G);
+					pcolb += (cobject.getReflect () * rcol.B);
 				}
 				
 				
@@ -162,7 +165,7 @@ namespace volkrenderer
 				pcolg = Math.Max (Math.Min (255, pcolg), 0);
 				pcolb = Math.Max (Math.Min (255, pcolb), 0);
 				
-				pcol = Color.FromArgb (pcolr, pcolg, pcolb);
+				pcol = Color.FromArgb ((int)pcolr, (int)pcolg, (int)pcolb);
 				
 				return pcol;
 				
@@ -178,10 +181,11 @@ namespace volkrenderer
 		}
 		
 		
-		private double shadowCheck (Vector3d p, Vector3d Lp, vScene scene, Primitive cobject)
+		private double shadowCheck (Vector3d p, Light li, vScene scene, Primitive cobject)
 		{
 			double shade = 1.0;
-			Vector3d L = Lp - p;
+			//at some point (adding area lights) i'll have to change this so it accounts for all the points not just the center
+			Vector3d L = li.getPoint() - p;
 			L.Normalize();
 			
 			foreach (Primitive spr in scene.getPrims ())

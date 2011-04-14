@@ -10,6 +10,7 @@ namespace volkrenderer
 		Color getColour();
 		
 		List<Vector3d> getPoints();
+		Vector3d getPoint();
 		
 		double getIntensity();
 		

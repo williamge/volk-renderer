@@ -9,6 +9,7 @@ namespace volkrenderer
 		Vector3d center;
 		int radius;
 		double reflectd;
+		double ambient;
 		double diffuse;
 		double specular;
 		double transparency;
@@ -24,6 +25,7 @@ namespace volkrenderer
 			diffuse = 1.0/3.0;
 			specular = 1.0/3.0;
 			transparency = 0.0;
+			ambient = 1.0/3.0;
 		}
 		
 		public Sphere (Color colour0, Vector3d center0, int radius0, double reflectd_)
@@ -36,6 +38,7 @@ namespace volkrenderer
 			diffuse = 1.0 / 3.0;
 			specular = 1.0 / 3.0;
 			transparency = 0.0;
+			ambient = 1.0 / 3.0;
 		}
 		
 		public double intersect (Vector3d d0, Vector3d d1)
@@ -77,6 +80,11 @@ namespace volkrenderer
 			return colour;
 		}
 		
+		public double getAmbient ()
+		{
+			return ambient;
+		}
+		
 		public double getDiffuse ()
 		{
 			return diffuse;
@@ -97,6 +105,9 @@ namespace volkrenderer
 		{
 			return reflectd;
 		}
+		
+		public bool isLight(){return false;}
+	
 		
 		//set
 		

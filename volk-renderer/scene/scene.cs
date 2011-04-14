@@ -53,13 +53,13 @@ namespace volkrenderer
 		public bool addPointLight (Vector3d p_, Color col_)
 
 		{
-			lights.Add (new PointLight (p_, col_));
+			lights.Add (new PointLight (p_, col_,this));
 			return true;
 		}
 		
 		public bool addPointLight (Vector3d p_, Color col_, double t_)
 		{
-			lights.Add (new PointLight (p_, col_,t_));
+			lights.Add (new PointLight (p_, col_,t_,this));
 			return true;
 		}
 		
