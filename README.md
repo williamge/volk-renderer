@@ -26,3 +26,11 @@ Lights:
 
 * point light
 
+
+
+TODO
+----------
+
+Add:
+
+* reduce the number of new() calls
