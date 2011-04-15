@@ -133,7 +133,7 @@ namespace volkrenderer
 		
 			//just testing so far
 			im.Save ("/Users/william/Dropbox/repos/volk-rend-csharp/volk-renderer/volk-renderer/bin/test.jpg");
-			//im.Save ("/Users/william/Dropbox/Public/test.jpg");
+			im.Save ("/Users/william/Dropbox/Public/test.jpg");
 		}
 		
 		double[] trace (Vector3d origin, Vector3d direction, vScene scene, int rdepth)
