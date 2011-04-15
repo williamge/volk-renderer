@@ -34,7 +34,7 @@ namespace volkrenderer
 			
 			texture = null;
 			
-			reflectd = 0.0;
+			reflectd = 0.5;
 			ambient = 0.0;
 			diffuse = 2.0/3.0;
 			specular = 0.0;
@@ -92,8 +92,11 @@ namespace volkrenderer
 				s = s1 % texture.Width;
 				t = t1 % texture.Height;
 				
-				s = Math.Abs (s);
-				t = Math.Abs (t);
+			
+					s = Math.Abs (s);
+				
+					t = Math.Abs (t);
+				
 				
 
 				

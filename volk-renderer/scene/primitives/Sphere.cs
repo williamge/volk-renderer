@@ -7,6 +7,9 @@ namespace volkrenderer
 	{
 		Color colour;
 		Vector3d center;
+		Vector3d vnorth;
+		Vector3d ve;
+		Vector3d vc;
 		int radius;
 		double reflectd;
 		double ambient;
@@ -14,11 +17,17 @@ namespace volkrenderer
 		double specular;
 		double transparency;
 		
+		Bitmap texture;
+		
 		public Sphere (Color colour0, Vector3d center0, int radius0)
 		{
 			colour = colour0;
 			center = center0;
 			radius = radius0;
+			
+			vnorth = new Vector3d (0, 1, 0) ;
+			ve = new Vector3d(1,0,0);
+			vc = Vector3d.Cross(vnorth,ve);
 			
 			reflectd = 0.0;
 			
@@ -26,6 +35,8 @@ namespace volkrenderer
 			specular = 1.0/3.0;
 			transparency = 0.0;
 			ambient = 1.0/3.0;
+			
+			texture = null;
 		}
 		
 		public Sphere (Color colour0, Vector3d center0, int radius0, double reflectd_)
@@ -77,6 +88,31 @@ namespace volkrenderer
 		
 		public Color getColour (Vector3d p)
 		{
+			
+			/* TODO */
+			/* some kind of interpolation to clean up textures */
+			if (texture != null) 
+			{
+				Vector3d vp = (p - center) * 1.0/radius;
+				double r = Math.Acos (Vector3d.Dot (-vp, vnorth));
+				double v = (r/Math.PI) * texture.Width;
+				double u;
+				
+				double theta = Math.Acos(Vector3d.Dot(new Vector3d(1,0,0),vp / Math.Sin(r))) / (2.0 * Math.PI);
+				
+				if (Vector3d.Dot (vc, vp) <0)
+					u = (1.0f - theta) * texture.Height;
+				else
+					u = theta * texture.Height;
+				
+
+				
+				return texture.GetPixel(Math.Min( (int)Math.Floor(u),texture.Width - 1 ),
+										Math.Min( (int)Math.Floor (v), texture.Height - 1));
+				
+				
+			}
+			
 			return colour;
 		}
 		
@@ -139,6 +175,13 @@ namespace volkrenderer
 		public bool setTransparency (double t_)
 		{
 			transparency = t_;
+			return true;
+		}
+		
+		public bool setTexture (Bitmap text_)
+
+		{
+			texture = text_;
 			return true;
 		}
 	}

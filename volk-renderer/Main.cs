@@ -21,7 +21,10 @@ namespace volkrenderer
 			sw.Start ();
 
 			vScene vs = new vScene (640, 480);
-			vs.addSphere (new Vector3d (0, -10, 100), 90, Color.Blue);
+			//vs.addSphere (new Vector3d (0, -10, 100), 90, Color.Blue);
+			Sphere tsphere = new Sphere(Color.Blue,new Vector3d (0, -10, 100), 90 );
+			tsphere.setTexture(new Bitmap("/Users/william/Dropbox/repos/volk-rend-csharp/volk-renderer/textures/dog.jpg"));
+			vs.addPrim(tsphere);
 			vs.addSphere (new Vector3d (-200, 0, 175), 90, Color.Gray,0.5);
 			vs.addPointLight (new Vector3d (-120, 120, 0), Color.White, 1.0);
 			vs.addPointLight(new Vector3d(-120,120,-20),Color.Gray,1.0);

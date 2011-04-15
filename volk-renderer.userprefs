@@ -1,18 +1,18 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="volk-renderer/MainWindow.xib.designer.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Console" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="volk-renderer/scene/primitives/Sphere.cs">
     <Files>
-      <File FileName="volk-renderer/raytrace/raytrace.cs" Line="98" Column="2" />
-      <File FileName="volk-renderer/scene/scene.cs" Line="79" Column="23" />
+      <File FileName="volk-renderer/raytrace/raytrace.cs" Line="106" Column="6" />
+      <File FileName="volk-renderer/scene/scene.cs" Line="75" Column="4" />
       <File FileName="volk-renderer/scene/primitives/Primitive.cs" Line="6" Column="25" />
-      <File FileName="volk-renderer/scene/primitives/Sphere.cs" Line="6" Column="22" />
-      <File FileName="volk-renderer/scene/primitives/Plane.cs" Line="93" Column="12" />
+      <File FileName="volk-renderer/scene/primitives/Sphere.cs" Line="103" Column="68" />
+      <File FileName="volk-renderer/scene/primitives/Plane.cs" Line="85" Column="38" />
       <File FileName="volk-renderer/scene/lights/PointLight.cs" Line="13" Column="5" />
       <File FileName="volk-renderer/scene/lights/Light.cs" Line="13" Column="23" />
-      <File FileName="volk-renderer/Main.cs" Line="29" Column="103" />
+      <File FileName="volk-renderer/Main.cs" Line="25" Column="73" />
       <File FileName="volk-renderer/MainWindowController.cs" Line="56" Column="22" />
       <File FileName="volk-renderer/scene/primitives/Triangle.cs" Line="13" Column="3" />
-      <File FileName="volk-renderer/MainWindow.xib.designer.cs" Line="42" Column="38" />
+      <File FileName="volk-renderer/MainWindow.xib.designer.cs" Line="42" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">

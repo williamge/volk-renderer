@@ -20,9 +20,9 @@ namespace volkrenderer
 			im = new Bitmap (scene.ImageWidth, scene.ImageHeight);
 			//Vector3d origin = new Vector3d (0, 0, -scene.ImageHeight);
 			//Vector3d origin = new Vector3d (600, 0, 100);
-			Vector3d origin = new Vector3d (0, 0, -480);
+			Vector3d origin = scene.origin;
 			
-			Vector3d target = new Vector3d (0, 0, 1);
+			Vector3d target = scene.target;
 			
 			
 			/* Note: some values were interpreted from this page: http://www.unknownroad.com/rtfm/graphics/rt_eyerays.html
@@ -60,6 +60,11 @@ namespace volkrenderer
 			#endif
 			
 			
+			double aacoef = 0.25;
+			
+			double[] pcol_ = new double[3];
+			double[] pcol = new double[3];
+			
 			for (int x = 0; x < im.Width; x++) {
 				for (int y = 0; y < im.Height; y++) {
 					/*
@@ -83,12 +88,16 @@ namespace volkrenderer
 					}
 					}*/				
 
+
 					
 					//int aan = 1;
-					double aacoef = 0.25;
 				
-					double[] pcol_ = new double[3];
-					double[] pcol = new double[3];
+					pcol_[0] = 0;
+					pcol_[1] = 0;
+					pcol_[2] = 0;
+					pcol[0] = 0;
+					pcol[1] = 0;
+					pcol[2] = 0;
 					
 					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 0.5) {
 						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 0.5) {
@@ -104,34 +113,34 @@ namespace volkrenderer
 						}
 					}
 					
-					double exposure = -1.00f;
+					double exposure = scene.exposure;
 					pcol[0] = 255.0 * (1.0 - Math.Exp (pcol[0] / 255.0 * exposure));
 					pcol[1] = 255.0 * (1.0 - Math.Exp (pcol[1] / 255.0 * exposure));
 					pcol[2] = 255.0 * (1.0 - Math.Exp (pcol[2] / 255.0 * exposure));
 					
 					//gamma correction, may be wrong or unnecessary
-					pcol[0] = pcol[0] * Math.Pow (pcol[0]/255.0, 1.0/2.2);
-					pcol[1] = pcol[1] * Math.Pow (pcol[1]/255.0, 1.0 / 2.2);
-					pcol[2] = pcol[2] * Math.Pow (pcol[2]/255.0, 1.0 / 2.2);
+					pcol[0] = pcol[0] * Math.Pow (pcol[0] / 255.0, 1.0 / 2.2);
+					pcol[1] = pcol[1] * Math.Pow (pcol[1] / 255.0, 1.0 / 2.2);
+					pcol[2] = pcol[2] * Math.Pow (pcol[2] / 255.0, 1.0 / 2.2);
 					
 					pcol[0] = Math.Max (Math.Min (255, pcol[0]), 0);
 					pcol[1] = Math.Max (Math.Min (255, pcol[1]), 0);
 					pcol[2] = Math.Max (Math.Min (255, pcol[2]), 0);
 			
-					Color pixcol = Color.FromArgb((int)pcol[0],(int)pcol[1],(int)pcol[2]);
+					Color pixcol = Color.FromArgb ((int)pcol[0], (int)pcol[1], (int)pcol[2]);
 					
-					im.SetPixel(x,y,pixcol);
-					
+					im.SetPixel (x, y, pixcol);
+				
 				}
 			}
 			
 			#if CONSFLAG
-			Console.WriteLine("Rays shot: " + Convert.ToString(rays));
+			Console.WriteLine ("Rays shot: " + Convert.ToString (rays));
 			Console.WriteLine ("Rays that hit depth limit: " + Convert.ToString (killedrays));
 			Console.WriteLine ("Shadow rays shot: " + Convert.ToString (shadowrays));
 			#endif
 		
-			//just testing so far
+			/* HACK */
 			im.Save ("/Users/william/Dropbox/repos/volk-rend-csharp/volk-renderer/volk-renderer/bin/test.jpg");
 			im.Save ("/Users/william/Dropbox/Public/test.jpg");
 		}
@@ -244,8 +253,9 @@ namespace volkrenderer
 
 			
 			} else {
-				//placeholder colour, should be black when ready.
-				Color sbcol = scene.getBack();
+				/* TODO */
+				/* add environment mapping */
+				Color sbcol = scene.getBack(origin,direction);
 				return new double[3] {sbcol.R,sbcol.G,sbcol.B};
 			}
 		}
@@ -258,7 +268,9 @@ namespace volkrenderer
 			#endif
 			
 			double shade = 1.0;
-			//at some point (adding area lights) i'll have to change this so it accounts for all the points not just the center
+			
+			/* TODO */
+			/*at some point (adding area lights) i'll have to change this so it accounts for all the points not just the center */
 			Vector3d L = li.getPoint () - p;
 			L.Normalize ();
 			
@@ -272,11 +284,11 @@ namespace volkrenderer
 						double objtrans = spr.getTransparency ();
 						if (objtrans == 0.0) 
 						{
-							shade = shade / 2.0;
+							//shade = shade / 2.0;
 							return 0.0;//shade;
 						}
 						else{
-							shade = Math.Min(1.0, shade / objtrans);
+							shade = Math.Min(1.0, shade * objtrans);
 						}
 						
 					}

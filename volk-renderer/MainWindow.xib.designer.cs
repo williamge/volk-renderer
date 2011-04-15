@@ -38,6 +38,5 @@ namespace volkrenderer {
 			}
 		}
 	}
-	
-	// Should subclass MonoMac.Foundatio
+
 }

@@ -10,11 +10,19 @@ namespace volkrenderer
 		
 		List<Primitive> prims = new List<Primitive> ();
 		List<Light> lights = new List<Light>(); 
+		public Vector3d origin;
+		public Vector3d target;
+		public double exposure;
 		
 		public vScene (int width_, int height_)
 		{
 			ImageWidth = width_;
 			ImageHeight = height_;
+			
+			origin = new Vector3d (0, 0, -480);
+			target = new Vector3d (0, 0, 1);
+			
+			exposure = -2.0f;
 		}
 		
 		public bool addPrim (Primitive p_)
@@ -74,7 +82,7 @@ namespace volkrenderer
 			return lights;
 		}
 		
-		public Color getBack ()
+		public Color getBack (Vector3d origin, Vector3d direction)
 		{
 			return Color.Black;
 		}
