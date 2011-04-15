@@ -31,11 +31,12 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Console|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Console</OutputPath>
     <WarningLevel>4</WarningLevel>
     <DefineConstants>CONSFLAG</DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -77,6 +78,7 @@
     <Compile Include="scene\lights\PointLight.cs" />
     <Compile Include="scene\lights\Light.cs" />
     <Compile Include="scene\primitives\LightSphere.cs" />
+    <Compile Include="scene\primitives\Triangle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainWindow.xib" />

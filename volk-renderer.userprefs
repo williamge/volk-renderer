@@ -2,22 +2,21 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Console" />
   <MonoDevelop.Ide.Workbench ActiveDocument="volk-renderer/Main.cs">
     <Files>
-      <File FileName="volk-renderer/raytrace/raytrace.cs" Line="150" Column="51" />
-      <File FileName="volk-renderer/scene/scene.cs" Line="45" Column="1" />
-      <File FileName="volk-renderer/scene/primitives/Primitive.cs" Line="1" Column="10" />
-      <File FileName="volk-renderer/scene/primitives/Sphere.cs" Line="1" Column="1" />
-      <File FileName="volk-renderer/scene/primitives/Plane.cs" Line="1" Column="1" />
-      <File FileName="volk-renderer/scene/lights/PointLight.cs" Line="15" Column="19" />
-      <File FileName="volk-renderer/scene/lights/Light.cs" Line="4" Column="34" />
-      <File FileName="volk-renderer/MainWindowController.cs" Line="34" Column="1" />
-      <File FileName="volk-renderer/Main.cs" Line="20" Column="23" />
+      <File FileName="volk-renderer/raytrace/raytrace.cs" Line="158" Column="107" />
+      <File FileName="volk-renderer/scene/scene.cs" Line="79" Column="23" />
+      <File FileName="volk-renderer/scene/primitives/Primitive.cs" Line="20" Column="7" />
+      <File FileName="volk-renderer/scene/primitives/Sphere.cs" Line="101" Column="4" />
+      <File FileName="volk-renderer/scene/primitives/Plane.cs" Line="28" Column="18" />
+      <File FileName="volk-renderer/scene/lights/PointLight.cs" Line="44" Column="4" />
+      <File FileName="volk-renderer/scene/lights/Light.cs" Line="13" Column="23" />
+      <File FileName="volk-renderer/Main.cs" Line="19" Column="39" />
+      <File FileName="volk-renderer/scene/primitives/LightSphere.cs" Line="66" Column="4" />
+      <File FileName="volk-renderer/MainWindow.xib.designer.cs" Line="42" Column="1" />
+      <File FileName="volk-renderer/MainWindowController.cs" Line="56" Column="22" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Solution Items" expanded="True">
-            <Node name="Packages" expanded="True" />
-          </Node>
           <Node name="volk-renderer" expanded="True" selected="True">
             <Node name="raytrace" expanded="True" />
             <Node name="scene" expanded="True">

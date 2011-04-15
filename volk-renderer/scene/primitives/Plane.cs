@@ -38,6 +38,10 @@ namespace volkrenderer
 			
 			if (denom != 0 && numer != 0) 
 			{
+				if (numer / denom > 10000) {//have to find a good value for this
+					return -1.0;}
+				
+				
 				return numer/denom;
 			}
 			else {

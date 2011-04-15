@@ -7,6 +7,7 @@ namespace volkrenderer
 	{
 		Color colour;
 		Vector3d center;
+		Light parent__;
 		int radius;
 		double reflectd;
 		double ambient;
@@ -14,8 +15,10 @@ namespace volkrenderer
 		double specular;
 		double transparency;
 		
-		public LightSphere (Color colour0, Vector3d center0, int radius0)
+		public LightSphere (Color colour0, Vector3d center0, int radius0, Light parent_)
 		{
+			parent__ = parent_;
+			
 			colour = colour0;
 			center = center0;
 			radius = radius0;
@@ -97,6 +100,12 @@ namespace volkrenderer
 		
 		{
 			return true;
+		}
+		
+		public Light getParent ()
+		
+		{
+			return parent__;
 		}
 	
 		

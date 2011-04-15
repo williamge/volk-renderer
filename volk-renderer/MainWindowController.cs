@@ -47,9 +47,9 @@ namespace volkrenderer
 		partial void render (NSButton sender)
 		{
 			myOutlet1.StringValue = string.Format ("Blah Blah Blah");
-			vScene vs = new vScene (1440, 768);
+			vScene vs = new vScene (640, 480);
 			vs.addSphere (new Vector3d (0, -10, 100), 90, Color.Blue);
-			vs.addSphere (new Vector3d (-200, 0, 175), 90, Color.Lime, 0.25);
+			vs.addSphere (new Vector3d (-200, 0, 175), 90, Color.Black, 0.9);
 			vs.addPointLight (new Vector3d (-120, 120, 0), Color.White, 1.0);
 			vs.addPlane (new Vector3d (0, -100, -480), new Vector3d (0, 1, 0), Color.DarkSalmon);
 			//vs.addPlane (new Vector3d(0,-100,400), new Vector3d(0,0,-1),Color.Salmon); 

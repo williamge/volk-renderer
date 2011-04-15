@@ -7,70 +7,122 @@ namespace volkrenderer
 	{
 		Bitmap im;
 		
+		Vector3d camx,camy,camz;
+		
+		#if CONSFLAG
+		Int64 rays;
+		Int64 killedrays;
+		Int64 shadowrays;
+		#endif
+		
 		public raytrace (vScene scene)
 		{
 			im = new Bitmap (scene.ImageWidth, scene.ImageHeight);
-			Vector3d origin = new Vector3d (0, 0, - scene.ImageHeight);
+			//Vector3d origin = new Vector3d (0, 0, -scene.ImageHeight);
+			//Vector3d origin = new Vector3d (600, 0, 100);
+			Vector3d origin = new Vector3d (0, 0, -480);
+			
+			Vector3d target = new Vector3d (0, 0, 1);
+			
+			double fovx = 1.0; //Math.PI / 4.0;
+			fovx *= 1.0 - 0.3; //enter fov here(on right)
+			double fovy = fovx;
+			
+			fovx = Math.Tan (fovx);
+			fovy = Math.Tan (fovy);
+			
+			//double fovz = 0.0000001;
+			
+			camz = target - origin;
+			camz.Normalize ();
+			Vector3d up = new Vector3d (0, 1, 0);
+			
+			camx = Vector3d.Cross (up, camz);
+			camy = Vector3d.Cross (camx, -camz);
+			
+			#if CONSFLAG
+			Console.WriteLine (camz.ToString ());
+			Console.WriteLine (camx.ToString ());
+			Console.WriteLine (camy.ToString ());
+			#endif
+			
+			#if CONSFLAG
+			rays = 0;
+			killedrays = 0;
+			shadowrays = 0;
+			#endif
 			
 			
 			for (int x = 0; x < im.Width; x++) {
 				for (int y = 0; y < im.Height; y++) {
-					Vector3d direction = new Vector3d (x - im.Width / 2, -(y - im.Height / 2), scene.ImageHeight);
-					direction = direction - origin;
 					
+					//int aan = 2;
+					double aacoef = 0.111111111111;
 				
+					double[] pcol_ = new double[3];
+					double[] pcol = new double[3];
 					
-					Vector3d dir1 = direction + new Vector3d (-0.5, 0.5, 0);
-					Vector3d dir2 = direction + new Vector3d (-0.5, -0.5, 0);
-					Vector3d dir3 = direction + new Vector3d (0.5, 0.5, 0);
-					Vector3d dir4 = direction + new Vector3d (0.5, -0.5, 0);
+					for (double offx = (double)x - 0.5; offx <= (double)x + 0.5; offx += 0.5) {
+						for (double offy = (double)y - 0.5; offy <= (double)y + 0.5; offy += 0.5) {
+							Vector3d dirprime = (fovx * camx * (offx - im.Width / 2)) + (fovy * camy * -(offy - im.Height / 2)) + camz - origin;
+							//Vector3d dirprime = new Vector3d (offx - im.Width / 2, -(offy - im.Height / 2), 0) - origin;
+							dirprime.Normalize();
+ 
+							pcol_ = trace (origin, dirprime, scene, 0);
+							pcol[0] += aacoef * pcol_[0];
+							pcol[1] += aacoef * pcol_[1];
+							pcol[2] += aacoef * pcol_[2];
+
+						}
+					}
 					
-					dir1.Normalize ();
-					dir2.Normalize ();
-					dir3.Normalize ();
-					dir4.Normalize ();
-				
+					double exposure = -1.00f;
+					pcol[0] = 255.0 * (1.0 - Math.Exp (pcol[0] / 255.0 * exposure));
+					pcol[1] = 255.0 * (1.0 - Math.Exp (pcol[1] / 255.0 * exposure));
+					pcol[2] = 255.0 * (1.0 - Math.Exp (pcol[2] / 255.0 * exposure));
 					
-					Color pix1 = trace (origin, dir1, scene,0);
-					Color pix2 = trace (origin, dir2, scene,0);
-					Color pix3 = trace (origin, dir3, scene,0);
-					Color pix4 = trace (origin, dir4, scene,0);
+					//gamma correction, may be wrong or unnecessary
+					pcol[0] = pcol[0] * Math.Pow (pcol[0]/255.0, 1.0/2.2);
+					pcol[1] = pcol[1] * Math.Pow (pcol[1]/255.0, 1.0 / 2.2);
+					pcol[2] = pcol[2] * Math.Pow (pcol[2]/255.0, 1.0 / 2.2);
 					
-					Color pixcol = Color.FromArgb(
-						(int)((.25 * pix1.R)
-							+(.25 * pix2.R)
-							+(.25 * pix3.R)
-							+(.25 * pix4.R)),
-						(int)((.25 * pix1.G)
-							+(.25 * pix2.G)
-							+(.25 * pix3.G)
-							+(.25 * pix4.G)),
-						(int)((.25 * pix1.B)
-							+(.25 * pix2.B)
-							+(.25 * pix3.B)
-							+(.25 * pix4.B))
-						);
+					pcol[0] = Math.Max (Math.Min (255, pcol[0]), 0);
+					pcol[1] = Math.Max (Math.Min (255, pcol[1]), 0);
+					pcol[2] = Math.Max (Math.Min (255, pcol[2]), 0);
+			
+					Color pixcol = Color.FromArgb((int)pcol[0],(int)pcol[1],(int)pcol[2]);
 					
-					
-					
-					//direction.Normalize ();
-					//Color pixcol = trace(origin,direction,scene,0);
 					im.SetPixel(x,y,pixcol);
 					
 				}
 			}
+			
+			#if CONSFLAG
+			Console.WriteLine("Rays shot: " + Convert.ToString(rays));
+			Console.WriteLine ("Rays that hit depth limit: " + Convert.ToString (killedrays));
+			Console.WriteLine ("Shadow rays shot: " + Convert.ToString (shadowrays));
+			#endif
 		
 			//just testing so far
 			im.Save ("/Users/william/Dropbox/repos/volk-rend-csharp/volk-renderer/volk-renderer/bin/test.jpg");
-			im.Save ("/Users/william/Dropbox/Public/test.jpg");
+			//im.Save ("/Users/william/Dropbox/Public/test.jpg");
 		}
 		
-		Color trace (Vector3d origin, Vector3d direction, vScene scene, int rdepth)
+		double[] trace (Vector3d origin, Vector3d direction, vScene scene, int rdepth)
 		{
 			
 			if (rdepth > 4) {
-				return Color.Black;
+				#if CONSFLAG
+				killedrays++;
+				#endif
+				double[] bcol = new double[3];
+				bcol[0] = bcol[1] = bcol[2] = 0.0;
+				return bcol;
 			}
+			
+			#if CONSFLAG
+			rays++;
+			#endif
 
 			
 			//closest t so far
@@ -95,13 +147,13 @@ namespace volkrenderer
 			if (ct > 0.0) {
 				Vector3d intersectp = origin + direction * ct;
 				
-				Color pcol;
-				double pcolr, pcolg, pcolb;
-				pcolr = pcolg = pcolb = 0.0;
+				//Color pcol;
+				double[] pcol = new double[3];
 				
 				if (cobject.isLight ()) 
 				{
-					return cobject.getColour (intersectp);
+					Color ccol = cobject.getColour(intersectp);
+					return new double[3] {ccol.R,ccol.G,ccol.B};
 				}
 				
 				
@@ -110,28 +162,27 @@ namespace volkrenderer
 					
 					Vector3d L = Lp - intersectp;
 					L.Normalize ();
-					//Vector3d testn = cobject.normal (intersectp);
 					double dot = Vector3d.Dot (L, cobject.normal (intersectp));
 					if (dot > 0) {
 						
-							double shade = shadowCheck (intersectp, li, scene, cobject);
+						double shade = shadowCheck (intersectp, li, scene, cobject);
 						
-							//diffuse multiplier
+						//diffuse multiplier
 						double diff = li.getIntensity () * cobject.getDiffuse () * dot;
 						//reflected ray off primitive
 						Vector3d R = (2.0 * dot * cobject.normal (intersectp)) - L;
 						//specular multiplier
 						double spec = li.getIntensity () * cobject.getSpecular () * Math.Pow (Vector3d.Dot (R, direction), 20);
 						
-							pcolr += (shade * 
+							/*pcolr*/pcol[0] += (shade * 
 								(diff * cobject.getColour (intersectp).R 
 									+ spec * li.getColour ().R));
 						
-							pcolg += (shade * 
+							/*pcolg*/pcol[1] += (shade * 
 								(diff * cobject.getColour (intersectp).G 
 									+ spec * li.getColour ().G));
 						
-							pcolb += (shade * 
+							/*pcolb*/pcol[2] += (shade * 
 								(diff * cobject.getColour (intersectp).B 
 									+ spec * li.getColour ().B));
 					
@@ -142,9 +193,9 @@ namespace volkrenderer
 				double ambient = cobject.getAmbient ();
 				//double ambient = 1.0 / 3.0;
 				
-				pcolr += (ambient * cobject.getColour (intersectp).R);
-				pcolg += (ambient * cobject.getColour (intersectp).G);
-				pcolb += (ambient * cobject.getColour (intersectp).B);
+				pcol[0] += (ambient * cobject.getColour (intersectp).R);
+				pcol[1] += (ambient * cobject.getColour (intersectp).G);
+				pcol[2] += (ambient * cobject.getColour (intersectp).B);
 				
 				//reflection
 				if (cobject.getReflect () > 0) {
@@ -153,44 +204,39 @@ namespace volkrenderer
 					Vector3d reflectray = direction - (2.0 * (Vector3d.Dot (N, direction))) * N;
 					reflectray.Normalize ();
 					
-					Color rcol = trace (intersectp, reflectray,
+					double[] rcol = trace (intersectp, reflectray,
 										scene, rdepth+1);
-					pcolr += (cobject.getReflect () * rcol.R);
-					pcolg += (cobject.getReflect () * rcol.G);
-					pcolb += (cobject.getReflect () * rcol.B);
+					pcol[0] += (cobject.getReflect () * rcol[0]);
+					pcol[1] += (cobject.getReflect () * rcol[1]);
+					pcol[2] += (cobject.getReflect () * rcol[2]);
 				}
-				
-				
-				pcolr = Math.Max (Math.Min (255, pcolr), 0);
-				pcolg = Math.Max (Math.Min (255, pcolg), 0);
-				pcolb = Math.Max (Math.Min (255, pcolb), 0);
-				
-				pcol = Color.FromArgb ((int)pcolr, (int)pcolg, (int)pcolb);
 				
 				return pcol;
 				
-				
-				//should probably add some actual lighting
-				//im.SetPixel (x, y, cobject.getColour(origin + direction*ct));
-				//
+
 			
 			} else {
 				//placeholder colour, should be black when ready.
-				return scene.getBack();
+				Color sbcol = scene.getBack();
+				return new double[3] {sbcol.R,sbcol.G,sbcol.B};
 			}
 		}
 		
 		
 		private double shadowCheck (Vector3d p, Light li, vScene scene, Primitive cobject)
 		{
+			#if CONSFLAG
+			shadowrays++;
+			#endif
+			
 			double shade = 1.0;
 			//at some point (adding area lights) i'll have to change this so it accounts for all the points not just the center
-			Vector3d L = li.getPoint() - p;
-			L.Normalize();
+			Vector3d L = li.getPoint () - p;
+			L.Normalize ();
 			
 			foreach (Primitive spr in scene.getPrims ())
 			{
-				if (spr != cobject) 
+				if (spr != cobject && spr != li)
 				{
 					double objintersect = spr.intersect (p, L);
 					if (objintersect > 0.000001) 
@@ -199,6 +245,7 @@ namespace volkrenderer
 						if (objtrans == 0.0) 
 						{
 							shade = shade / 2.0;
+							return 0.0;//shade;
 						}
 						else{
 							shade = Math.Min(1.0, shade / objtrans);

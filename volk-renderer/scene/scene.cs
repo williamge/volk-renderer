@@ -76,7 +76,7 @@ namespace volkrenderer
 		
 		public Color getBack ()
 		{
-			return Color.HotPink;
+			return Color.Black;
 		}
 		
 	}
