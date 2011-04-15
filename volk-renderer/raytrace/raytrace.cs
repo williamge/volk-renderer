@@ -24,8 +24,15 @@ namespace volkrenderer
 			
 			Vector3d target = new Vector3d (0, 0, 1);
 			
-			double fovx = 1.0; //Math.PI / 4.0;
-			fovx *= 1.0 - 0.3; //enter fov here(on right)
+			
+			/* Note: some values were interpreted from this page: http://www.unknownroad.com/rtfm/graphics/rt_eyerays.html
+			 * It is why there is a commented out pi/4
+			 * */
+		
+			double fovx = 1.0;
+			//Math.PI / 4.0;
+			fovx *= 1.0 - 0.3;
+			//enter fov here(on right)
 			double fovy = fovx;
 			
 			fovx = Math.Tan (fovx);
@@ -55,7 +62,7 @@ namespace volkrenderer
 			
 			for (int x = 0; x < im.Width; x++) {
 				for (int y = 0; y < im.Height; y++) {
-					
+					/*
 					//int aan = 2;
 					double aacoef = 0.111111111111;
 				
@@ -67,7 +74,28 @@ namespace volkrenderer
 							Vector3d dirprime = (fovx * camx * (offx - im.Width / 2)) + (fovy * camy * -(offy - im.Height / 2)) + camz - origin;
 							//Vector3d dirprime = new Vector3d (offx - im.Width / 2, -(offy - im.Height / 2), 0) - origin;
 							dirprime.Normalize();
- 
+	
+							pcol_ = trace (origin, dirprime, scene, 0);
+							pcol[0] += aacoef * pcol_[0];
+							pcol[1] += aacoef * pcol_[1];
+							pcol[2] += aacoef * pcol_[2];
+
+					}
+					}*/				
+
+					
+					//int aan = 1;
+					double aacoef = 0.25;
+				
+					double[] pcol_ = new double[3];
+					double[] pcol = new double[3];
+					
+					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 0.5) {
+						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 0.5) {
+							Vector3d dirprime = (fovx * camx * (offx - im.Width / 2)) + (fovy * camy * -(offy - im.Height / 2)) + camz - origin;
+							//Vector3d dirprime = new Vector3d (offx - im.Width / 2, -(offy - im.Height / 2), 0) - origin;
+							dirprime.Normalize ();
+	
 							pcol_ = trace (origin, dirprime, scene, 0);
 							pcol[0] += aacoef * pcol_[0];
 							pcol[1] += aacoef * pcol_[1];

@@ -10,10 +10,13 @@ Global
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 		Console|Any CPU = Console|Any CPU
+		ConsoleBuild|Any CPU = ConsoleBuild|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3610848D-E087-40CF-AE2B-EE321785A438}.Console|Any CPU.ActiveCfg = Console|Any CPU
 		{3610848D-E087-40CF-AE2B-EE321785A438}.Console|Any CPU.Build.0 = Console|Any CPU
+		{3610848D-E087-40CF-AE2B-EE321785A438}.ConsoleBuild|Any CPU.ActiveCfg = ConsoleBuild|Any CPU
+		{3610848D-E087-40CF-AE2B-EE321785A438}.ConsoleBuild|Any CPU.Build.0 = ConsoleBuild|Any CPU
 		{3610848D-E087-40CF-AE2B-EE321785A438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3610848D-E087-40CF-AE2B-EE321785A438}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3610848D-E087-40CF-AE2B-EE321785A438}.Release|Any CPU.ActiveCfg = Release|Any CPU

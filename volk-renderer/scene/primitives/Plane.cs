@@ -6,6 +6,9 @@ namespace volkrenderer
 	public class Plane : Primitive
 	{
 		Vector3d point,planeNormal;
+		
+		Vector3d v,w;
+		
 		Color colour;
 		
 		double reflectd;
@@ -14,13 +17,22 @@ namespace volkrenderer
 		double specular;
 		double transparency;
 		
+		Bitmap texture;
+		
 		public Plane (Vector3d point_, Vector3d planeNormal_, Color colour_)
 		{
 			point = point_;
 			planeNormal = planeNormal_;
 			planeNormal.Normalize ();
 			
+			v = new Vector3d (planeNormal.Y, planeNormal.Z, - planeNormal.X);
+			w = Vector3d.Cross (v, planeNormal);
+			v.Normalize ();
+			w.Normalize ();
+			
 			colour = colour_;
+			
+			texture = null;
 			
 			reflectd = 0.0;
 			ambient = 0.0;
@@ -62,6 +74,99 @@ namespace volkrenderer
 
 		public Color getColour (Vector3d p)
 		{
+			
+			if (texture != null) 
+			{
+				double s1, t1;
+				
+				double s, t;
+
+			
+				s1 = Vector3d.Dot (p - point, v);
+				t1 = Vector3d.Dot (p - point, w);
+				
+			
+
+
+				
+				s = s1 % texture.Width;
+				t = t1 % texture.Height;
+				
+				s = Math.Abs (s);
+				t = Math.Abs (t);
+				
+
+				
+				double pr, pg, pb;
+				
+
+				
+				
+				int x1 = (int)Math.Floor (s);
+				int x2 = (int)Math.Ceiling (s);
+				int x2x1 = x2 - x1;
+				if (x2 >= texture.Width) {
+					x2 = 0;
+				
+				}
+				//int x2 = Math.Min ((int)Math.Ceiling (s), texture.Width-1);
+				
+				int y1 = (int)Math.Floor (t);
+				//int y2 = Math.Min ((int)Math.Ceiling (t), texture.Height-1);
+				int y2 = (int)Math.Ceiling (t);
+				int y2y1 = y2 - y1;
+				if (y2 >= texture.Height) 
+				{
+					y2 = 0;
+				}
+				
+				int bxx, byy;
+				bxx = byy = 1;
+
+				if (x2x1 <= 0) {
+					bxx = 0;
+					x2x1 = 1;
+				}
+				
+				if (y2y1 <= 0) {
+					byy = 0;
+					y2y1 = 1;
+				}
+				
+				
+				if (y2y1 * x2x1 <= 0) {
+					byy = 0;
+					y2y1 = 1;
+					bxx = 0;
+					x2x1 = 1;
+				}
+				
+				
+				pr = 	byy*(texture.GetPixel(x1,y1).R / (x2x1*y2y1)) * ((x2-s)*(y2-t)) 
+						+ bxx *(texture.GetPixel(x2,y1).R / (x2x1*y2y1)) * ((s-x1)*(y2-t)) 
+						+ byy*(texture.GetPixel(x1,y2).R / (x2x1*y2y1)) * ((x2-s)*(t-y1)) 
+						+ bxx * (texture.GetPixel(x2,y2).R / (x2x1*y2y1)) * ((s-x1)*(t-y1));
+				
+				pg = 	byy*(texture.GetPixel(x1,y1).G / (x2x1*y2y1)) * ((x2-s)*(y2-t)) 
+						+ bxx *(texture.GetPixel(x2,y1).G / (x2x1*y2y1)) * ((s-x1)*(y2-t)) 
+						+ byy*(texture.GetPixel(x1,y2).G / (x2x1*y2y1)) * ((x2-s)*(t-y1)) 
+						+ bxx * (texture.GetPixel(x2,y2).G / (x2x1*y2y1)) * ((s-x1)*(t-y1));
+				
+				pb = 	byy*(texture.GetPixel(x1,y1).B / (x2x1*y2y1)) * ((x2-s)*(y2-t)) 
+						+ bxx *(texture.GetPixel(x2,y1).B / (x2x1*y2y1)) * ((s-x1)*(y2-t)) 
+						+ byy*(texture.GetPixel(x1,y2).B / (x2x1*y2y1)) * ((x2-s)*(t-y1)) 
+						+ bxx * (texture.GetPixel(x2,y2).B / (x2x1*y2y1)) * ((s-x1)*(t-y1));
+				
+				pr = Math.Max(Math.Min(pr,255),0);
+				pg = Math.Max(Math.Min(pg,255),0);
+				pb = Math.Max(Math.Min(pb,255),0);
+				
+				return Color.FromArgb((int)pr,(int)pg,(int)pb);
+				
+				
+			}
+			
+			
 			return colour;
 		}
 		
@@ -124,6 +229,13 @@ namespace volkrenderer
 		{
 			transparency = t_;
 			return true;
+		}
+		
+		public bool setTexture (Bitmap im_)
+		{
+			texture = im_;
+			return true;
+			
 		}
 	}
 }

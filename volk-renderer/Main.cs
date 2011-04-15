@@ -25,7 +25,10 @@ namespace volkrenderer
 			vs.addSphere (new Vector3d (-200, 0, 175), 90, Color.Gray,0.5);
 			vs.addPointLight (new Vector3d (-120, 120, 0), Color.White, 1.0);
 			vs.addPointLight(new Vector3d(-120,120,-20),Color.Gray,1.0);
-			vs.addPlane (new Vector3d (0, -100, -480), new Vector3d (0, 1, 0), Color.DarkSalmon);
+			Plane pl = new Plane (new Vector3d (0, -100, -480), new Vector3d (0, 1, 0), Color.DarkSalmon);
+			Bitmap checker = new Bitmap("/Users/william/Dropbox/repos/volk-rend-csharp/volk-renderer/textures/checker.png");
+			Console.WriteLine(pl.setTexture(checker));
+			Console.WriteLine(vs.addPrim(pl));
 			//vs.addPlane (new Vector3d(0,-100,400), new Vector3d(0,0,-1),Color.Salmon); 
 			new raytrace (vs);
 			
