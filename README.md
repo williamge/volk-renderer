@@ -10,6 +10,7 @@ Raytracing
 ----------
 
 Features so far:
+
 * ray casting
 * Phong shading
 * reflections (multiple depth)
@@ -17,9 +18,11 @@ Features so far:
 * naive anti-aliasing
 
 Shapes:
+
 * sphere
 * plane
 
 Lights:
+
 * point light
 
