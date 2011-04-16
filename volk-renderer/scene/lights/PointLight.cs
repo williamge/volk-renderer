@@ -10,7 +10,6 @@ namespace volkrenderer
 		Vector3d point;
 		double[] colour;
 		double intensity;
-		//LightSphere viewSphere;
 		
 		//Sphere fields
 		int radius;

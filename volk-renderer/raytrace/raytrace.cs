@@ -1,4 +1,5 @@
 //#define THREADING
+#define CONSFLAGD
 
 using System;
 using System.Drawing;
@@ -21,7 +22,7 @@ namespace volkrenderer
 		 * converted to an image */
 		double[,,] dimage;
 		
-		#if CONSFLAG
+		#if CONSFLAGD
 		Int64 rays;
 		Int64 killedrays;
 		Int64 shadowrays;
@@ -56,13 +57,13 @@ namespace volkrenderer
 			camx = Vector3d.Cross (up, camz);
 			camy = Vector3d.Cross (camx, -camz);
 			
-			#if CONSFLAG
+			#if CONSFLAGD
 			Console.WriteLine (camz.ToString ());
 			Console.WriteLine (camx.ToString ());
 			Console.WriteLine (camy.ToString ());
 			#endif
 			
-			#if CONSFLAG
+			#if CONSFLAGD
 			rays = 0;
 			killedrays = 0;
 			shadowrays = 0;
@@ -239,7 +240,7 @@ namespace volkrenderer
 				}
 			}
 #endif			
-			#if CONSFLAG
+			#if CONSFLAGD
 			Console.WriteLine ("Rays shot: " + Convert.ToString (rays));
 			Console.WriteLine ("Rays that hit depth limit: " + Convert.ToString (killedrays));
 			Console.WriteLine ("Shadow rays shot: " + Convert.ToString (shadowrays));
@@ -273,7 +274,7 @@ namespace volkrenderer
 		{
 			
 			if (rdepth > 4) {
-				#if CONSFLAG
+				#if CONSFLAGD
 				killedrays++;
 				#endif
 				double[] bcol = new double[3];
@@ -281,7 +282,7 @@ namespace volkrenderer
 				return bcol;
 			}
 			
-			#if CONSFLAG
+			#if CONSFLAGD
 			rays++;
 			#endif
 			
@@ -386,7 +387,7 @@ namespace volkrenderer
 		
 		private double shadowCheck (Vector3d p, Light li, vScene scene, Primitive cobject)
 		{
-			#if CONSFLAG
+			#if CONSFLAGD
 			shadowrays++;
 			#endif
 			
