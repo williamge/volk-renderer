@@ -32,6 +32,8 @@ Pictures
 -----------
 ![volk](https://github.com/pjpe/volk-renderer/raw/master/dev%20pics/version%200.3/messing%20with%20fov/testspheretexture1.jpg "Basic scene with textures")
 
+![volk](https://github.com/pjpe/volk-renderer/raw/master/dev%20pics/version%200.3/test.jpg "Different angle")
+
 
 
 TODO
