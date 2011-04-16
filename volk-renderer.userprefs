@@ -1,15 +1,15 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="ConsoleBuild" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="volk-renderer/Main.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="volk-renderer/raytrace/raytrace.cs">
     <Files>
-      <File FileName="volk-renderer/raytrace/raytrace.cs" Line="438" Column="9" />
-      <File FileName="volk-renderer/scene/scene.cs" Line="85" Column="17" />
+      <File FileName="volk-renderer/raytrace/raytrace.cs" Line="86" Column="6" />
+      <File FileName="volk-renderer/scene/scene.cs" Line="26" Column="33" />
       <File FileName="volk-renderer/scene/primitives/Primitive.cs" Line="12" Column="10" />
       <File FileName="volk-renderer/scene/primitives/Sphere.cs" Line="213" Column="27" />
       <File FileName="volk-renderer/scene/primitives/Plane.cs" Line="262" Column="6" />
       <File FileName="volk-renderer/scene/lights/PointLight.cs" Line="60" Column="17" />
       <File FileName="volk-renderer/scene/lights/Light.cs" Line="10" Column="10" />
-      <File FileName="volk-renderer/Main.cs" Line="38" Column="4" />
+      <File FileName="volk-renderer/Main.cs" Line="20" Column="52" />
       <File FileName="volk-renderer/scene/primitives/Triangle.cs" Line="24" Column="17" />
       <File FileName="volk-renderer/scene/primitives/LightSphere.cs" Line="6" Column="26" />
     </Files>

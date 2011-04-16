@@ -1,4 +1,3 @@
-#define NAIVE
 //#define THREADING
 
 using System;
@@ -70,9 +69,31 @@ namespace volkrenderer
 			#endif			
 			
 			double aacoef = 0.25;
-			
+#if THREADING
+#else
 			double[] pcol_ = new double[3];
 			double[] pcol = new double[3];
+#endif
+			
+#if THREADING
+			
+			Task<double[]>[] task = new Task<double[]>[4];
+			
+			Parallel.For(0,im.Width,delegate(int x)	{
+			
+			/*for (int x = 0; x < im.Width; x++) {*/
+				for (int y = 0; y < im.Height; y++) {
+					
+					double[] pcol_ = new double[3];
+					double[] pcol = new double[3];
+				
+					pcol_[0] = 0;
+					pcol_[1] = 0;
+					pcol_[2] = 0;
+					pcol[0] = 0;
+					pcol[1] = 0;
+					pcol[2] = 0;
+#else
 			
 			for (int x = 0; x < im.Width; x++) {
 				for (int y = 0; y < im.Height; y++) {
@@ -84,58 +105,58 @@ namespace volkrenderer
 					pcol[1] = 0;
 					pcol[2] = 0;
 					
-					/* TODO
-					 * fix up the threading traces to use the new double array */
-#if THREADING				
-					Task<double[]>[] task = new Task<double[]>[4];
+#endif
 					
+#if THREADING				
 					
 					//
 					
 					Vector3d dirprime = (fovx * camx * (x - im.Width / 2)) + (fovy * camy * -(y - im.Height / 2)) + camz - origin;
 					dirprime.Normalize ();
-					
-					threadinfo tinfo = new threadinfo(origin,dirprime,scene);
+							
+					threadinfo[] tinfo = new threadinfo[4];
+					tinfo[0] = new threadinfo(origin, dirprime, scene);
+
 
 					task[0] = Task.Factory.StartNew (
 								(ti__) 
 								=>
-		 						{ return threadtrace (ti__); },tinfo );
+		 						{ return threadtrace (ti__); },tinfo[0] );
 					
 					//
 					
 					dirprime = (fovx * camx * (x + 0.5 - im.Width / 2)) + (fovy * camy * -(y - im.Height / 2)) + camz - origin;
 					dirprime.Normalize ();
 					
-					tinfo = new threadinfo(origin,dirprime,scene);
+					tinfo[1] = new threadinfo(origin, dirprime, scene);
 
 					task[1] = Task.Factory.StartNew (
 								(ti__) 
 								=>
-		 						{ return threadtrace (ti__); },tinfo );
+		 						{ return threadtrace (ti__); },tinfo[1] );
 					
 					//
 					
 					dirprime = (fovx * camx * (x + 0.5 - im.Width / 2)) + (fovy * camy * -(y + 0.5 - im.Height / 2)) + camz - origin;
 					dirprime.Normalize ();
 					
-					tinfo = new threadinfo(origin,dirprime,scene);
+					tinfo[2] = new threadinfo(origin, dirprime, scene);
 
 					task[2] = Task.Factory.StartNew (
 								(ti__) 
 								=>
-		 						{ return threadtrace (ti__); },tinfo );
+		 						{ return threadtrace (ti__); },tinfo[2] );
 					//
 					
 					dirprime = (fovx * camx * (x - im.Width / 2)) + (fovy * camy * -(y + 0.5 - im.Height / 2)) + camz - origin;
 					dirprime.Normalize ();
 					
-					tinfo = new threadinfo(origin,dirprime,scene);
+					tinfo[3] = new threadinfo(origin, dirprime, scene);
 
 					task[3] = Task.Factory.StartNew (
 								(ti__) 
 								=>
-		 						{ return threadtrace (ti__); },tinfo );
+		 						{ return threadtrace (ti__); },tinfo[3] );
 					
 
 		
@@ -173,13 +194,15 @@ namespace volkrenderer
 					pcol[1] = Math.Max (Math.Min (255, pcol[1]), 0);
 					pcol[2] = Math.Max (Math.Min (255, pcol[2]), 0);
 					
-					Color pixcol = Color.FromArgb ((int)pcol[0], (int)pcol[1], (int)pcol[2]);
+					dimage[x,y,0] = pcol[0];
+					dimage[x,y,1] = pcol[2];
+					dimage[x,y,2] = pcol[2];
 					
-#endif
+						}});
 					
 
 						
-#if NAIVE
+#else
 					
 					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 0.5) {
 						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 0.5) {
@@ -212,10 +235,10 @@ namespace volkrenderer
 					dimage[x,y,0] = pcol[0];
 					dimage[x,y,1] = pcol[2];
 					dimage[x,y,2] = pcol[2];									
-#endif		
+	
 				}
 			}
-			
+#endif			
 			#if CONSFLAG
 			Console.WriteLine ("Rays shot: " + Convert.ToString (rays));
 			Console.WriteLine ("Rays that hit depth limit: " + Convert.ToString (killedrays));
