@@ -16,6 +16,7 @@ Features so far:
 * reflections (multiple depth)
 * textures (partial)
 * naive anti-aliasing
+* threading (slow and might be broken)
 
 Shapes:
 
@@ -27,6 +28,11 @@ Lights:
 * point light
 
 
+Pictures
+-----------
+![volk](dev pics/version 0.3/messing with fov/testspheretexture1.jpg "Basic scene with textures")
+
+
 
 TODO
 ----------
@@ -34,3 +40,4 @@ TODO
 Add:
 
 * reduce the number of new() calls
+* figure out what the hell is wrong with threading
