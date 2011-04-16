@@ -1,6 +1,13 @@
+#define NAIVE
+//#define THREADING
+
 using System;
 using System.Drawing;
 using OpenTK;
+using System.Threading;
+using System.Threading.Tasks;
+
+
 namespace volkrenderer
 {
 	public class raytrace
@@ -65,28 +72,12 @@ namespace volkrenderer
 			double[] pcol_ = new double[3];
 			double[] pcol = new double[3];
 			
+
+			
 			for (int x = 0; x < im.Width; x++) {
 				for (int y = 0; y < im.Height; y++) {
-					/*
-					//int aan = 2;
-					double aacoef = 0.111111111111;
-				
-					double[] pcol_ = new double[3];
-					double[] pcol = new double[3];
 					
-					for (double offx = (double)x - 0.5; offx <= (double)x + 0.5; offx += 0.5) {
-						for (double offy = (double)y - 0.5; offy <= (double)y + 0.5; offy += 0.5) {
-							Vector3d dirprime = (fovx * camx * (offx - im.Width / 2)) + (fovy * camy * -(offy - im.Height / 2)) + camz - origin;
-							//Vector3d dirprime = new Vector3d (offx - im.Width / 2, -(offy - im.Height / 2), 0) - origin;
-							dirprime.Normalize();
-	
-							pcol_ = trace (origin, dirprime, scene, 0);
-							pcol[0] += aacoef * pcol_[0];
-							pcol[1] += aacoef * pcol_[1];
-							pcol[2] += aacoef * pcol_[2];
 
-					}
-					}*/				
 
 
 					
@@ -99,12 +90,112 @@ namespace volkrenderer
 					pcol[1] = 0;
 					pcol[2] = 0;
 					
+					
+#if THREADING
+					
+					Task<double[]>[] task = new Task<double[]>[4];
+					
+					
+					//
+					
+					Vector3d dirprime = (fovx * camx * (x - im.Width / 2)) + (fovy * camy * -(y - im.Height / 2)) + camz - origin;
+					dirprime.Normalize ();
+					
+					threadinfo tinfo = new threadinfo(origin,dirprime,scene);
+
+					task[0] = Task.Factory.StartNew (
+								(ti__) 
+								=>
+		 						{ return threadtrace (ti__); },tinfo );
+					
+					//
+					
+					dirprime = (fovx * camx * (x + 0.5 - im.Width / 2)) + (fovy * camy * -(y - im.Height / 2)) + camz - origin;
+					dirprime.Normalize ();
+					
+					tinfo = new threadinfo(origin,dirprime,scene);
+
+					task[1] = Task.Factory.StartNew (
+								(ti__) 
+								=>
+		 						{ return threadtrace (ti__); },tinfo );
+					
+					//
+					
+					dirprime = (fovx * camx * (x + 0.5 - im.Width / 2)) + (fovy * camy * -(y + 0.5 - im.Height / 2)) + camz - origin;
+					dirprime.Normalize ();
+					
+					tinfo = new threadinfo(origin,dirprime,scene);
+
+					task[2] = Task.Factory.StartNew (
+								(ti__) 
+								=>
+		 						{ return threadtrace (ti__); },tinfo );
+					//
+					
+					dirprime = (fovx * camx * (x - im.Width / 2)) + (fovy * camy * -(y + 0.5 - im.Height / 2)) + camz - origin;
+					dirprime.Normalize ();
+					
+					tinfo = new threadinfo(origin,dirprime,scene);
+
+					task[3] = Task.Factory.StartNew (
+								(ti__) 
+								=>
+		 						{ return threadtrace (ti__); },tinfo );
+					
+
+		
+					//Task.WaitAll (task[0], task[1], task[2], task[3]);
+					
+					//pcol_ = task[0].
+		
+					pcol[0] = 0.25 * task[0].Result[0] 
+							+ 0.25 * task[1].Result[0] 
+							+ 0.25 * task[2].Result[0] 
+							+ 0.25 * task[3].Result[0];
+					
+					pcol[1] = 0.25 * task[0].Result[1] 
+							+ 0.25 * task[1].Result[1] 
+							+ 0.25 * task[2].Result[1] 
+							+ 0.25 * task[3].Result[1];
+					
+					pcol[2] = 0.25 * task[0].Result[2] 
+							+ 0.25 * task[1].Result[2] 
+							+ 0.25 * task[2].Result[2] 
+							+ 0.25 * task[3].Result[2];
+					
+					//exposures, may not be useful idk
+					double exposure = scene.exposure;
+					pcol[0] = 255.0 * (1.0 - Math.Exp (pcol[0] / 255.0 * exposure));
+					pcol[1] = 255.0 * (1.0 - Math.Exp (pcol[1] / 255.0 * exposure));
+					pcol[2] = 255.0 * (1.0 - Math.Exp (pcol[2] / 255.0 * exposure));
+					
+					//gamma correction, may be wrong or unnecessary
+					pcol[0] = pcol[0] * Math.Pow (pcol[0] / 255.0, 1.0 / 2.2);
+					pcol[1] = pcol[1] * Math.Pow (pcol[1] / 255.0, 1.0 / 2.2);
+					pcol[2] = pcol[2] * Math.Pow (pcol[2] / 255.0, 1.0 / 2.2);
+					
+					pcol[0] = Math.Max (Math.Min (255, pcol[0]), 0);
+					pcol[1] = Math.Max (Math.Min (255, pcol[1]), 0);
+					pcol[2] = Math.Max (Math.Min (255, pcol[2]), 0);
+					
+					Color pixcol = Color.FromArgb ((int)pcol[0], (int)pcol[1], (int)pcol[2]);
+					
+#endif
+					
+
+						
+#if NAIVE
+					
 					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 0.5) {
 						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 0.5) {
 							Vector3d dirprime = (fovx * camx * (offx - im.Width / 2)) + (fovy * camy * -(offy - im.Height / 2)) + camz - origin;
 							//Vector3d dirprime = new Vector3d (offx - im.Width / 2, -(offy - im.Height / 2), 0) - origin;
 							dirprime.Normalize ();
 	
+							
+
+							
 							pcol_ = trace (origin, dirprime, scene, 0);
 							pcol[0] += aacoef * pcol_[0];
 							pcol[1] += aacoef * pcol_[1];
@@ -113,6 +204,7 @@ namespace volkrenderer
 						}
 					}
 					
+					//exposures, may not be useful idk
 					double exposure = scene.exposure;
 					pcol[0] = 255.0 * (1.0 - Math.Exp (pcol[0] / 255.0 * exposure));
 					pcol[1] = 255.0 * (1.0 - Math.Exp (pcol[1] / 255.0 * exposure));
@@ -129,6 +221,8 @@ namespace volkrenderer
 			
 					Color pixcol = Color.FromArgb ((int)pcol[0], (int)pcol[1], (int)pcol[2]);
 					
+#endif
+					
 					im.SetPixel (x, y, pixcol);
 				
 				}
@@ -141,9 +235,32 @@ namespace volkrenderer
 			#endif
 		
 			/* HACK */
-			im.Save ("/Users/william/Dropbox/repos/volk-rend-csharp/volk-renderer/volk-renderer/bin/test.jpg");
+		im.Save ("/Users/william/Dropbox/repos/volk-rend-csharp/volk-renderer/volk-renderer/bin/test.jpg");
 			im.Save ("/Users/william/Dropbox/Public/test.jpg");
 		}
+		
+#if THREADING
+		private double[] threadtrace (object ti__)
+		{
+			threadinfo ti_ = (threadinfo)ti__;
+			return trace(ti_.origin_,ti_.direction_,ti_.scene_,0);
+		}
+		
+		private class threadinfo{
+			
+			public Vector3d origin_, direction_;
+			public vScene scene_;
+			
+			public threadinfo (Vector3d origin__, Vector3d direction__, vScene scene__)
+			{
+				origin_ = origin__;
+				direction_ = direction__;
+				scene_ = scene__;
+			}
+		}
+		
+#endif
+		
 		
 		double[] trace (Vector3d origin, Vector3d direction, vScene scene, int rdepth)
 		{

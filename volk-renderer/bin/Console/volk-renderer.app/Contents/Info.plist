@@ -15,7 +15,7 @@
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
     <key>CFBundleShortVersionString</key>
-    <string>0.1</string>
+    <string>0.3</string>
     <key>CFBundleDevelopmentRegion</key>
     <string>English</string>
     <key>CFBundleExecutable</key>
