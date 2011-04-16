@@ -7,7 +7,7 @@ namespace volkrenderer
 	public interface Light
 	{
 		
-		Color getColour();
+		double[] getColour();
 		
 		List<Vector3d> getPoints();
 		Vector3d getPoint();

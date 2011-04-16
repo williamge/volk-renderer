@@ -15,10 +15,9 @@ namespace volkrenderer
 		static void Main (string[] args)
 		{
 #if CONSFLAG
-			long Frequency, Ticks, TotalTime;
-			Stopwatch sw = new Stopwatch ();
-			Frequency = Stopwatch.Frequency;
-			sw.Start ();
+			
+			/* TODO
+			 * clean this up to make a good example scene */
 
 			vScene vs = new vScene (640, 480);
 			//vs.addSphere (new Vector3d (0, -10, 100), 90, Color.Blue);
@@ -33,12 +32,19 @@ namespace volkrenderer
 			Console.WriteLine(pl.setTexture(checker));
 			Console.WriteLine(vs.addPrim(pl));
 			//vs.addPlane (new Vector3d(0,-100,400), new Vector3d(0,0,-1),Color.Salmon); 
-			new raytrace (vs);
+			
+			long Frequency, Ticks, TotalTime;
+			Stopwatch sw = new Stopwatch ();
+			Frequency = Stopwatch.Frequency;
+			sw.Start ();
+			
+			raytrace rt = new raytrace (vs);
 			
 			sw.Stop ();
 			Ticks = sw.ElapsedTicks;
 			TotalTime = 1000000L * Ticks / Frequency * 1/1000000;
 			Console.WriteLine ("Total time in seconds " + TotalTime);
+			rt.imageSave("/Users/william/Dropbox/repos/volk-rend-csharp/volk-renderer/volk-renderer/bin/test.jpg");
 #else
 			NSApplication.Init ();
 			NSApplication.Main (args);

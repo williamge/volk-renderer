@@ -21,7 +21,7 @@ namespace volkrenderer
 			throw new NotImplementedException ();
 		}
 
-		public Color getColour (Vector3d p)
+		public double[] getColour (Vector3d p)
 		{
 			throw new NotImplementedException ();
 		}

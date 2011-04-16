@@ -8,7 +8,7 @@ namespace volkrenderer
 	{
 		List<Vector3d> points;
 		Vector3d point;
-		Color colour;
+		double[] colour;
 		double intensity;
 		//LightSphere viewSphere;
 		
@@ -20,7 +20,11 @@ namespace volkrenderer
 			points = new List<Vector3d> ();
 			points.Add (p);
 			point = p;
-			colour = col_;
+			colour = new double[3];
+			colour[0] = col_.R;
+			colour[1] = col_.G;
+			colour[2] = col_.B;
+			
 			intensity = 1.0;
 			radius = (int)(5.0 * intensity);
 			//viewSphere = new LightSphere (col_, p, (int)(5.0 * intensity),this);
@@ -32,7 +36,12 @@ namespace volkrenderer
 			points = new List<Vector3d> ();
 			points.Add (p);
 			point = p;
-			colour = col_;
+			
+			colour = new double[3];
+			colour[0] = col_.R;
+			colour[1] = col_.G;
+			colour[2] = col_.B;
+			
 			intensity = intensity_;
 			radius = (int)(5.0 * intensity);
 			//viewSphere = new LightSphere (col_, p, (int)(5.0 * intensity),this);
@@ -48,7 +57,7 @@ namespace volkrenderer
 			return point;
 		}
 		
-		public Color getColour ()
+		public double[] getColour ()
 		{
 			return colour;
 		}
@@ -87,7 +96,7 @@ namespace volkrenderer
 			return N;
 		}
 
-		public Color getColour (Vector3d p)
+		public double[] getColour (Vector3d p)
 		{
 			return colour;
 		}

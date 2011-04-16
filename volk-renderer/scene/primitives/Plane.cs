@@ -9,7 +9,7 @@ namespace volkrenderer
 		
 		Vector3d v,w;
 		
-		Color colour;
+		double[] colour;
 		
 		double reflectd;
 		double ambient;
@@ -17,7 +17,8 @@ namespace volkrenderer
 		double specular;
 		double transparency;
 		
-		Bitmap texture;
+		double[,,] texture;
+		int tWidth, tHeight;
 		
 		public Plane (Vector3d point_, Vector3d planeNormal_, Color colour_)
 		{
@@ -30,7 +31,10 @@ namespace volkrenderer
 			v.Normalize ();
 			w.Normalize ();
 			
-			colour = colour_;
+			colour = new double[3];
+			colour[0] = colour_.R;
+			colour[1] = colour_.G;
+			colour[2] = colour_.B;
 			
 			texture = null;
 			
@@ -72,7 +76,7 @@ namespace volkrenderer
 		
 		//get
 
-		public Color getColour (Vector3d p)
+		public double[] getColour (Vector3d p)
 		{
 			
 			if (texture != null) 
@@ -89,8 +93,8 @@ namespace volkrenderer
 
 
 				
-				s = s1 % texture.Width;
-				t = t1 % texture.Height;
+				s = s1 % tWidth;
+				t = t1 % tHeight;
 				
 			
 					s = Math.Abs (s);
@@ -100,7 +104,8 @@ namespace volkrenderer
 				
 
 				
-				double pr, pg, pb;
+				//double pr, pg, pb;
+				double[] pc = new double[3];
 				
 
 				
@@ -108,7 +113,7 @@ namespace volkrenderer
 				int x1 = (int)Math.Floor (s);
 				int x2 = (int)Math.Ceiling (s);
 				int x2x1 = x2 - x1;
-				if (x2 >= texture.Width) {
+				if (x2 >= tWidth) {
 					x2 = 0;
 				
 				}
@@ -118,7 +123,7 @@ namespace volkrenderer
 				//int y2 = Math.Min ((int)Math.Ceiling (t), texture.Height-1);
 				int y2 = (int)Math.Ceiling (t);
 				int y2y1 = y2 - y1;
-				if (y2 >= texture.Height) 
+				if (y2 >= tHeight) 
 				{
 					y2 = 0;
 				}
@@ -145,26 +150,26 @@ namespace volkrenderer
 				}
 				
 				
-				pr = 	byy*(texture.GetPixel(x1,y1).R / (x2x1*y2y1)) * ((x2-s)*(y2-t)) 
-						+ bxx *(texture.GetPixel(x2,y1).R / (x2x1*y2y1)) * ((s-x1)*(y2-t)) 
-						+ byy*(texture.GetPixel(x1,y2).R / (x2x1*y2y1)) * ((x2-s)*(t-y1)) 
-						+ bxx * (texture.GetPixel(x2,y2).R / (x2x1*y2y1)) * ((s-x1)*(t-y1));
+				pc[0] = byy * (texture[x1, y1, 0] / (x2x1 * y2y1)) * ((x2 - s) * (y2 - t)) 
+						+ bxx * (texture[x2, y1, 0] / (x2x1 * y2y1)) * ((s - x1) * (y2 - t)) 
+						+ byy * (texture[x1, y2, 0] / (x2x1 * y2y1)) * ((x2 - s) * (t - y1)) 
+						+ bxx * (texture[x2, y2, 0] / (x2x1 * y2y1)) * ((s - x1) * (t - y1));
 				
-				pg = 	byy*(texture.GetPixel(x1,y1).G / (x2x1*y2y1)) * ((x2-s)*(y2-t)) 
-						+ bxx *(texture.GetPixel(x2,y1).G / (x2x1*y2y1)) * ((s-x1)*(y2-t)) 
-						+ byy*(texture.GetPixel(x1,y2).G / (x2x1*y2y1)) * ((x2-s)*(t-y1)) 
-						+ bxx * (texture.GetPixel(x2,y2).G / (x2x1*y2y1)) * ((s-x1)*(t-y1));
+				pc[1] = byy * (texture[x1, y1, 1] / (x2x1 * y2y1)) * ((x2 - s) * (y2 - t)) 
+						+ bxx * (texture[x2, y1, 1] / (x2x1 * y2y1)) * ((s - x1) * (y2 - t)) 
+						+ byy * (texture[x1, y2, 1] / (x2x1 * y2y1)) * ((x2 - s) * (t - y1)) 
+						+ bxx * (texture[x2, y2, 1] / (x2x1 * y2y1)) * ((s - x1) * (t - y1));
 				
-				pb = 	byy*(texture.GetPixel(x1,y1).B / (x2x1*y2y1)) * ((x2-s)*(y2-t)) 
-						+ bxx *(texture.GetPixel(x2,y1).B / (x2x1*y2y1)) * ((s-x1)*(y2-t)) 
-						+ byy*(texture.GetPixel(x1,y2).B / (x2x1*y2y1)) * ((x2-s)*(t-y1)) 
-						+ bxx * (texture.GetPixel(x2,y2).B / (x2x1*y2y1)) * ((s-x1)*(t-y1));
+				pc[2] = byy * (texture[x1, y1, 2] / (x2x1 * y2y1)) * ((x2 - s) * (y2 - t)) 
+						+ bxx * (texture[x2, y1, 2] / (x2x1 * y2y1)) * ((s - x1) * (y2 - t)) 
+						+ byy * (texture[x1, y2, 2] / (x2x1 * y2y1)) * ((x2 - s) * (t - y1)) 
+						+ bxx * (texture[x2, y2, 2] / (x2x1 * y2y1)) * ((s - x1) * (t - y1));
 				
-				pr = Math.Max(Math.Min(pr,255),0);
+				/*pr = Math.Max(Math.Min(pr,255),0);
 				pg = Math.Max(Math.Min(pg,255),0);
-				pb = Math.Max(Math.Min(pb,255),0);
-				
-				return Color.FromArgb((int)pr,(int)pg,(int)pb);
+				pb = Math.Max(Math.Min(pb,255),0);*/
+		
+				return pc;//Color.FromArgb((int)pr,(int)pg,(int)pb);
 				
 				
 			}
@@ -206,7 +211,9 @@ namespace volkrenderer
 		
 		public bool setColour (Color c_)
 		{
-			colour = c_;
+			colour[0] = c_.R;
+			colour[1] = c_.G;
+			colour[2] = c_.B;
 			return true;
 		}
 
@@ -234,9 +241,25 @@ namespace volkrenderer
 			return true;
 		}
 		
-		public bool setTexture (Bitmap im_)
+		public bool setTexture (Bitmap text_)
 		{
-			texture = im_;
+			texture = new double[text_.Width, text_.Height, 3];
+			
+			for (int i = 0; i < text_.Width; i++) {
+				for (int j = 0; j < text_.Height; j++) {
+					Color tcol = text_.GetPixel (i, j);
+					texture[i, j, 0] = (double)tcol.R;
+					texture[i, j, 1] = (double)tcol.G;
+					texture[i, j, 2] = (double)tcol.B;
+					
+				}
+				
+			}
+			
+			tWidth = text_.Width;
+			tHeight = text_.Height;
+			
+			//texture = im_;
 			return true;
 			
 		}

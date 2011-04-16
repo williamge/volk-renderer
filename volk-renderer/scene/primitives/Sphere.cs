@@ -5,7 +5,7 @@ namespace volkrenderer
 {
 	public class Sphere : Primitive
 	{
-		Color colour;
+		double[] colour;
 		Vector3d center;
 		Vector3d vnorth;
 		Vector3d ve;
@@ -17,11 +17,15 @@ namespace volkrenderer
 		double specular;
 		double transparency;
 		
-		Bitmap texture;
+		double[,,] texture;
+		int tWidth, tHeight;
 		
 		public Sphere (Color colour0, Vector3d center0, int radius0)
 		{
-			colour = colour0;
+			colour = new double[3];
+			colour[0] = colour0.R;
+			colour[1] = colour0.G;
+			colour[2] = colour0.B;
 			center = center0;
 			radius = radius0;
 			
@@ -41,7 +45,10 @@ namespace volkrenderer
 		
 		public Sphere (Color colour0, Vector3d center0, int radius0, double reflectd_)
 		{
-			colour = colour0;
+			colour = new double[3];
+			colour[0] = colour0.R;
+			colour[1] = colour0.G;
+			colour[2] = colour0.B;
 			center = center0;
 			radius = radius0;
 			
@@ -86,7 +93,7 @@ namespace volkrenderer
 		
 		//get
 		
-		public Color getColour (Vector3d p)
+		public double[] getColour (Vector3d p)
 		{
 			
 			/* TODO */
@@ -95,20 +102,25 @@ namespace volkrenderer
 			{
 				Vector3d vp = (p - center) * 1.0/radius;
 				double r = Math.Acos (Vector3d.Dot (-vp, vnorth));
-				double v = (r/Math.PI) * texture.Width;
+				double v = (r/Math.PI) * tWidth;
 				double u;
 				
 				double theta = Math.Acos(Vector3d.Dot(new Vector3d(1,0,0),vp / Math.Sin(r))) / (2.0 * Math.PI);
 				
 				if (Vector3d.Dot (vc, vp) <0)
-					u = (1.0f - theta) * texture.Height;
+					u = (1.0f - theta) * tHeight;
 				else
-					u = theta * texture.Height;
+					u = theta * tHeight;
 				
-
-				
-				return texture.GetPixel(Math.Min( (int)Math.Floor(u),texture.Width - 1 ),
-										Math.Min( (int)Math.Floor (v), texture.Height - 1));
+				int x_ = Math.Min( (int)Math.Floor(u),tWidth - 1);
+				int y_ = Math.Min( (int)Math.Floor (v), tHeight - 1);
+				double[] tcol = new double[3];
+				tcol[0] = texture[x_,y_,0];
+				tcol[1] = texture[x_,y_,1];
+				tcol[2] = texture[x_,y_,2];
+				return tcol;
+					//texture.GetPixel(Math.Min( (int)Math.Floor(u),tWidth - 1 ),
+										//Math.Min( (int)Math.Floor (v), tHeight - 1));
 				
 				
 			}
@@ -150,7 +162,9 @@ namespace volkrenderer
 		public bool setColour (Color c_)
 		
 		{
-			colour = c_;
+			colour[0] = c_.R;
+			colour[1] = c_.G;
+			colour[2] = c_.B;
 			return true;
 		}
 		
@@ -181,7 +195,24 @@ namespace volkrenderer
 		public bool setTexture (Bitmap text_)
 
 		{
-			texture = text_;
+			
+			texture = new double[text_.Width, text_.Height, 3];
+			
+			for (int i = 0; i < text_.Width; i++) {
+				for (int j = 0; j < text_.Height; j++) {
+					Color tcol = text_.GetPixel (i, j);
+					texture[i, j, 0] = (double)tcol.R;
+					texture[i, j, 1] = (double)tcol.G;
+					texture[i, j, 2] = (double)tcol.B;
+				
+				}
+			
+			}
+			
+			tWidth = text_.Width;
+			tHeight = text_.Height;
+			
+			//texture = text_;
 			return true;
 		}
 	}

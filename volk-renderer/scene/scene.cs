@@ -22,6 +22,8 @@ namespace volkrenderer
 			origin = new Vector3d (0, 0, -480);
 			target = new Vector3d (0, 0, 1);
 			
+			/* TODO
+			 * make this user-settable */
 			exposure = -2.0f;
 		}
 		
@@ -82,9 +84,10 @@ namespace volkrenderer
 			return lights;
 		}
 		
-		public Color getBack (Vector3d origin, Vector3d direction)
+		public double[] getBack (Vector3d origin, Vector3d direction)
 		{
-			return Color.Black;
+			//return Color.Black;
+			return new double[] { 0.0, 0.0, 0.0 };
 		}
 		
 	}

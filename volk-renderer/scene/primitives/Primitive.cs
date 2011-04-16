@@ -9,7 +9,7 @@ namespace volkrenderer
 		double intersect(Vector3d d0, Vector3d d1);
 		Vector3d normal (Vector3d point);
 		
-		Color getColour(Vector3d p);
+		double[] getColour(Vector3d p);
 		
 		double getDiffuse();
 		double getSpecular();

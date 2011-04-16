@@ -1,18 +1,17 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Console" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="volk-renderer/raytrace/raytrace.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="ConsoleBuild" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="volk-renderer/Main.cs">
     <Files>
-      <File FileName="volk-renderer/raytrace/raytrace.cs" Line="149" Column="22" />
-      <File FileName="volk-renderer/scene/scene.cs" Line="25" Column="19" />
-      <File FileName="volk-renderer/scene/primitives/Primitive.cs" Line="6" Column="25" />
-      <File FileName="volk-renderer/scene/primitives/Sphere.cs" Line="93" Column="4" />
-      <File FileName="volk-renderer/scene/primitives/Plane.cs" Line="37" Column="18" />
-      <File FileName="volk-renderer/scene/lights/PointLight.cs" Line="13" Column="5" />
-      <File FileName="volk-renderer/scene/lights/Light.cs" Line="13" Column="23" />
-      <File FileName="volk-renderer/Main.cs" Line="29" Column="69" />
-      <File FileName="volk-renderer/MainWindowController.cs" Line="56" Column="22" />
-      <File FileName="volk-renderer/scene/primitives/Triangle.cs" Line="13" Column="3" />
-      <File FileName="volk-renderer/MainWindow.xib.designer.cs" Line="41" Column="1" />
+      <File FileName="volk-renderer/raytrace/raytrace.cs" Line="438" Column="9" />
+      <File FileName="volk-renderer/scene/scene.cs" Line="85" Column="17" />
+      <File FileName="volk-renderer/scene/primitives/Primitive.cs" Line="12" Column="10" />
+      <File FileName="volk-renderer/scene/primitives/Sphere.cs" Line="213" Column="27" />
+      <File FileName="volk-renderer/scene/primitives/Plane.cs" Line="262" Column="6" />
+      <File FileName="volk-renderer/scene/lights/PointLight.cs" Line="60" Column="17" />
+      <File FileName="volk-renderer/scene/lights/Light.cs" Line="10" Column="10" />
+      <File FileName="volk-renderer/Main.cs" Line="38" Column="4" />
+      <File FileName="volk-renderer/scene/primitives/Triangle.cs" Line="24" Column="17" />
+      <File FileName="volk-renderer/scene/primitives/LightSphere.cs" Line="6" Column="26" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">

@@ -3,7 +3,7 @@ using System.Drawing;
 using OpenTK;
 namespace volkrenderer
 {
-	public class LightSphere : Primitive
+	public class LightSphere
 	{
 		Color colour;
 		Vector3d center;
