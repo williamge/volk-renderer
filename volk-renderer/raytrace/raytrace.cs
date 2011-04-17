@@ -1,5 +1,5 @@
-//#define THREADING
-#define CONSFLAGD
+#define THREADING
+//#define CONSFLAGD
 
 using System;
 using System.Drawing;
@@ -75,15 +75,20 @@ namespace volkrenderer
 			double[] pcol_ = new double[3];
 			double[] pcol = new double[3];
 #endif
+			int iheight = im.Height;
+			int iwidth = im.Width;
 			
 #if THREADING
 			
 			Task<double[]>[] task = new Task<double[]>[4];
 			
-			Parallel.For(0,im.Width,delegate(int x)	{
 			
-			/*for (int x = 0; x < im.Width; x++) {*/
-				for (int y = 0; y < im.Height; y++) {
+			
+			
+			Parallel.For(0,iwidth,delegate(int x)	{
+			
+			/*for (int x = 0; x < iwidth; x++) {*/
+				for (int y = 0; y < iheight; y++) {
 					
 					double[] pcol_ = new double[3];
 					double[] pcol = new double[3];
@@ -96,8 +101,8 @@ namespace volkrenderer
 					pcol[2] = 0;
 #else
 			
-			for (int x = 0; x < im.Width; x++) {
-				for (int y = 0; y < im.Height; y++) {
+			for (int x = 0; x < iwidth; x++) {
+				for (int y = 0; y < iheight; y++) {
 				
 					pcol_[0] = 0;
 					pcol_[1] = 0;
@@ -112,7 +117,7 @@ namespace volkrenderer
 					
 					//
 					
-					Vector3d dirprime = (fovx * camx * (x - im.Width / 2)) + (fovy * camy * -(y - im.Height / 2)) + camz - origin;
+					Vector3d dirprime = (fovx * camx * (x - iwidth / 2)) + (fovy * camy * -(y - iheight / 2)) + camz - origin;
 					dirprime.Normalize ();
 							
 					threadinfo[] tinfo = new threadinfo[4];
@@ -126,7 +131,7 @@ namespace volkrenderer
 					
 					//
 					
-					dirprime = (fovx * camx * (x + 0.5 - im.Width / 2)) + (fovy * camy * -(y - im.Height / 2)) + camz - origin;
+					dirprime = (fovx * camx * (x + 0.5 - iwidth / 2)) + (fovy * camy * -(y - iheight / 2)) + camz - origin;
 					dirprime.Normalize ();
 					
 					tinfo[1] = new threadinfo(origin, dirprime, scene);
@@ -138,7 +143,7 @@ namespace volkrenderer
 					
 					//
 					
-					dirprime = (fovx * camx * (x + 0.5 - im.Width / 2)) + (fovy * camy * -(y + 0.5 - im.Height / 2)) + camz - origin;
+					dirprime = (fovx * camx * (x + 0.5 - iwidth / 2)) + (fovy * camy * -(y + 0.5 - iheight / 2)) + camz - origin;
 					dirprime.Normalize ();
 					
 					tinfo[2] = new threadinfo(origin, dirprime, scene);
@@ -149,7 +154,7 @@ namespace volkrenderer
 		 						{ return threadtrace (ti__); },tinfo[2] );
 					//
 					
-					dirprime = (fovx * camx * (x - im.Width / 2)) + (fovy * camy * -(y + 0.5 - im.Height / 2)) + camz - origin;
+					dirprime = (fovx * camx * (x - iwidth / 2)) + (fovy * camy * -(y + 0.5 - iheight / 2)) + camz - origin;
 					dirprime.Normalize ();
 					
 					tinfo[3] = new threadinfo(origin, dirprime, scene);
@@ -440,7 +445,7 @@ namespace volkrenderer
 			im.Save (path);
 			
 			/* HACK */
-			im.Save ("/Users/william/Dropbox/Public/test.jpg");
+			//im.Save ("/Users/william/Dropbox/Public/test.jpg");
 			
 			
 			/* TODO
