@@ -18,6 +18,7 @@ Features so far:
 * naive anti-aliasing
 * threading (slow and might be broken)
 * camera settings (fov and position only so far)
+* image information stored as floating point values for improved precision/manipulation
 
 Shapes:
 
