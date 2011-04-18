@@ -403,8 +403,6 @@ namespace volkrenderer
 			} else {
 				/* TODO */
 				/* add environment mapping */
-				//Color sbcol = scene.getBack(origin,direction);
-				//return new double[3] {sbcol.R,sbcol.G,sbcol.B};
 				return scene.getBack(origin,direction);
 			}
 		}

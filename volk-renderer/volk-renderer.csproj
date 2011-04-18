@@ -46,6 +46,13 @@
     <DefineConstants>CONSFLAG</DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'WindowsR|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\WindowsR</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>WINDOWS</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -100,5 +107,9 @@
     <Folder Include="raytrace\" />
     <Folder Include="scene\primitives\" />
     <Folder Include="scene\lights\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="dog.jpg" />
+    <Content Include="checker.png" />
   </ItemGroup>
 </Project>
