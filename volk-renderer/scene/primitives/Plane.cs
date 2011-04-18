@@ -82,33 +82,19 @@ namespace volkrenderer
 			if (texture != null) 
 			{
 				double s1, t1;
-				
 				double s, t;
-
 			
 				s1 = Vector3d.Dot (p - point, v);
 				t1 = Vector3d.Dot (p - point, w);
 				
-			
-
-
-				
 				s = s1 % tWidth;
 				t = t1 % tHeight;
-				
 			
-					s = Math.Abs (s);
-				
-					t = Math.Abs (t);
-				
-				
-
+				s = Math.Abs (s);
+				t = Math.Abs (t);
 				
 				//double pr, pg, pb;
 				double[] pc = new double[3];
-				
-
-				
 				
 				int x1 = (int)Math.Floor (s);
 				int x2 = (int)Math.Ceiling (s);

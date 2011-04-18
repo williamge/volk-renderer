@@ -1,5 +1,10 @@
-#define THREADING
-//#define CONSFLAGD
+//#define THREADING
+#define CONSFLAGD
+#define AMBIENT
+#define DIFFUSE
+#define SPECULAR
+#define SHADOWS
+#define REFLECTION
 
 using System;
 using System.Drawing;
@@ -313,31 +318,41 @@ namespace volkrenderer
 				Vector3d intersectp = origin + direction * ct;
 				
 				//Color pcol;
-				double[] pcol = new double[3];
+				double[] pcol = new double[3] {0.0,0.0,0.0};
 				
 				if (cobject.isLight ()) 
 				{
 					return cobject.getColour(intersectp);
-					//Color ccol = cobject.getColour(intersectp);
-					//return new double[3] {ccol.R,ccol.G,ccol.B};
 				}			
 				
 				foreach (Light li in scene.getLights ()) {
 					Vector3d Lp = li.getPoint ();
-					
+						
 					Vector3d L = Lp - intersectp;
 					L.Normalize ();
+						
 					double dot = Vector3d.Dot (L, cobject.normal (intersectp));
 					if (dot > 0) {
 						
-						double shade = shadowCheck (intersectp, li, scene, cobject);
+						double shade = 1.0;
+						#if SHADOWS
+						shade = shadowCheck (intersectp, li, scene, cobject);
+						#endif
 						
 						//diffuse multiplier
-						double diff = li.getIntensity () * cobject.getDiffuse () * dot;
+						double diff = 0.0;
+						#if DIFFUSE
+						diff = li.getIntensity () * cobject.getDiffuse () * dot;
+						#endif
+							
 						//reflected ray off primitive
 						Vector3d R = (2.0 * dot * cobject.normal (intersectp)) - L;
 						//specular multiplier
-						double spec = li.getIntensity () * cobject.getSpecular () * Math.Pow (Vector3d.Dot (R, direction), 20);
+						double spec = 0.0;
+							
+						#if SPECULAR
+						spec = li.getIntensity () * cobject.getSpecular () * Math.Pow (Vector3d.Dot (R, direction), 20);
+						#endif
 						
 							pcol[0] += (shade * 
 								(diff * cobject.getColour (intersectp)[0]
@@ -354,14 +369,18 @@ namespace volkrenderer
 					}
 				
 				}
+					
 				//ambient lighting 
-				double ambient = cobject.getAmbient ();
-				//double ambient = 1.0 / 3.0;
+				double ambient = 0.0;
+				#if AMBIENT
+				ambient = cobject.getAmbient ();
+				#endif
 				
 				pcol[0] += (ambient * cobject.getColour (intersectp)[0]);
 				pcol[1] += (ambient * cobject.getColour (intersectp)[1]);
 				pcol[2] += (ambient * cobject.getColour (intersectp)[2]);
 				
+				#if REFLECTION
 				//reflection
 				if (cobject.getReflect () > 0) {
 					
@@ -375,6 +394,7 @@ namespace volkrenderer
 					pcol[1] += (cobject.getReflect () * rcol[1]);
 					pcol[2] += (cobject.getReflect () * rcol[2]);
 				}
+				#endif
 				
 				return pcol;
 				

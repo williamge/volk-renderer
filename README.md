@@ -13,15 +13,17 @@ Features so far:
 
 * ray casting
 * Phong shading
-* reflections (multiple depth)
-* textures (partial)
+* multiple depth reflections
+* textures
 * naive anti-aliasing
 * threading (slow and might be broken)
+* camera settings (fov and position only so far)
 
 Shapes:
 
 * sphere
 * plane
+* triangle (untested)
 
 Lights:
 
@@ -32,8 +34,9 @@ Pictures
 -----------
 ![volk](https://github.com/pjpe/volk-renderer/raw/master/dev%20pics/version%200.3/messing%20with%20fov/testspheretexture1.jpg "Basic scene with textures")
 
-![volk](https://github.com/pjpe/volk-renderer/raw/master/dev%20pics/version%200.3/test.jpg "Different angle")
+![volk](https://github.com/pjpe/volk-renderer/raw/master/dev%20pics/version%200.3/messing%20with%20fov/testspheretexture2.jpg "Different angle")
 
+![volk](https://github.com/pjpe/volk-renderer/raw/master/dev%20pics/version%200.3/test3.jpg "different lighting values")
 
 
 TODO

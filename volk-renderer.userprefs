@@ -2,22 +2,24 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="ConsoleBuild" />
   <MonoDevelop.Ide.Workbench ActiveDocument="volk-renderer/raytrace/raytrace.cs">
     <Files>
-      <File FileName="volk-renderer/raytrace/raytrace.cs" Line="86" Column="6" />
+      <File FileName="volk-renderer/raytrace/raytrace.cs" Line="86" Column="1" />
       <File FileName="volk-renderer/scene/scene.cs" Line="26" Column="33" />
       <File FileName="volk-renderer/scene/primitives/Primitive.cs" Line="12" Column="10" />
       <File FileName="volk-renderer/scene/primitives/Sphere.cs" Line="213" Column="27" />
       <File FileName="volk-renderer/scene/primitives/Plane.cs" Line="262" Column="6" />
-      <File FileName="volk-renderer/scene/lights/PointLight.cs" Line="60" Column="17" />
+      <File FileName="volk-renderer/scene/lights/PointLight.cs" Line="42" Column="23" />
       <File FileName="volk-renderer/scene/lights/Light.cs" Line="10" Column="10" />
-      <File FileName="volk-renderer/Main.cs" Line="20" Column="52" />
+      <File FileName="volk-renderer/Main.cs" Line="50" Column="6" />
       <File FileName="volk-renderer/scene/primitives/Triangle.cs" Line="24" Column="17" />
       <File FileName="volk-renderer/scene/primitives/LightSphere.cs" Line="6" Column="26" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="volk-renderer" expanded="True" selected="True">
-            <Node name="raytrace" expanded="True" />
+          <Node name="volk-renderer" expanded="True">
+            <Node name="raytrace" expanded="True">
+              <Node name="raytrace.cs" selected="True" />
+            </Node>
             <Node name="scene" expanded="True">
               <Node name="lights" expanded="True" />
               <Node name="primitives" expanded="True" />
