@@ -60,23 +60,33 @@ namespace volkrenderer
 		{
 			vScene vs = new vScene (640, 480);
 			Sphere tsphere = new Sphere (Color.Blue, new Vector3d (0, -10, 100), 90);
-
+			
+			#if WINDOWS
+			Bitmap checker = new Bitmap (THEGODDAMNRELATIVEPATH + @"\checker.jpg");
+			#else
+			Bitmap checker = new Bitmap (THEGODDAMNRELATIVEPATH + "/" + "checker.png");
+			#endif 
 			
 			#if WINDOWS
 			tsphere.setTexture (new Bitmap (THEGODDAMNRELATIVEPATH + @"\dog.jpg"));
 			#else
 			tsphere.setTexture (new Bitmap (THEGODDAMNRELATIVEPATH + "/" + "dog.jpg"));
 			#endif
-			vs.addPrim (tsphere);
+			//vs.addPrim (tsphere);
 			vs.addSphere (new Vector3d (-200, 0, 175), 90, Color.Gray, 0.5);
 			vs.addPointLight (new Vector3d (-120, 120, 0), Color.White, 1.0);
 			vs.addPointLight (new Vector3d (-120, 120, -20), Color.Gray, 1.0);
 			Plane pl = new Plane (new Vector3d (0, -100, -480), new Vector3d (0, 1, 0), Color.DarkSalmon);
-			#if WINDOWS
-			Bitmap checker = new Bitmap (THEGODDAMNRELATIVEPATH + @"\checker.jpg");
-			#else
-			Bitmap checker = new Bitmap (THEGODDAMNRELATIVEPATH + "/" + "checker.png");
-			#endif
+
+			Triangle tr = new Triangle(new Vector3d(0,0,100), new Vector3d(10,100,150),new Vector3d(50,50,50),Color.Aqua);
+			
+			Quad qu = new Quad(new Vector3d(-200,-100,100),
+								new Vector3d(-200,200,150),
+								new Vector3d(0,200,150),
+								new Vector3d(0,-100,100),
+								Color.WhiteSmoke);
+			vs.addPrim(qu);
+			vs.addPrim(tr);
 			Console.WriteLine (pl.setTexture (checker));
 			Console.WriteLine (vs.addPrim (pl));
 			return vs;

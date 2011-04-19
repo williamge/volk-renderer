@@ -24,7 +24,8 @@ Shapes:
 
 * sphere
 * plane
-* triangle (untested)
+* triangle
+* quadrilateral
 
 Lights:
 

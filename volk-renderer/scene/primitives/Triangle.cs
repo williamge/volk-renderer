@@ -13,6 +13,7 @@ namespace volkrenderer
 		double[] colour;
 		
 		double[,,] texture;
+		int tWidth,tHeight;
 		
 		double diffuse, specular, transparency, reflect, ambient;
 		
@@ -57,17 +58,19 @@ namespace volkrenderer
 			/* triangle intersection code taken from:
 			 * http://igad.nhtv.nl/~bikker/files/faster.pdf
 			 * it might be wrong but i really hope it's right */
-			double a, b;
 			
-			a = -Vector3d.Dot (normalt, d0 - p1);
-			b = Vector3d.Dot (normalt, d1 - d0);
+			//L dot normal
+			double denom = Vector3d.Dot (d1, normalt);
+			//(P0-L0) dot normal			
+			double numer = Vector3d.Dot (p1 - d0, normalt);
 			
-			if (Math.Abs (b) <= 0)
+			if (denom == 0 || numer == 0)
 			{
 				return -1.0;
 			}
 			
-			double intersectt = a/b;
+			double intersectt = numer/denom;
+
 			
 			Vector3d tpoint = d0 + (intersectt * d1);
 			
@@ -104,6 +107,74 @@ namespace volkrenderer
 			
 			return colour;
 		}
+		
+		//set
+		
+		public bool setColour (Color c_)
+		
+		{
+			colour[0] = c_.R;
+			colour[1] = c_.G;
+			colour[2] = c_.B;
+			return true;
+		}
+		
+		public bool setAmbient (double a_)
+		
+		{
+			ambient = a_;
+			return true;
+		}
+		
+		public bool setDiffuse (double d_)
+		{
+			diffuse = d_;
+			return true;
+		}
+		
+		public bool setSpecular (double s_)
+		{
+			specular = s_;
+			return true;
+		}
+		
+		public bool setReflect (double r_)
+		{
+			reflect = r_;
+			return true;
+		}
+		
+		public bool setTransparency (double t_)
+		{
+			transparency = t_;
+			return true;
+		}
+		
+		public bool setTexture (Bitmap text_)
+
+		{
+			
+			texture = new double[text_.Width, text_.Height, 3];
+			
+			for (int i = 0; i < text_.Width; i++) {
+				for (int j = 0; j < text_.Height; j++) {
+					Color tcol = text_.GetPixel (i, j);
+					texture[i, j, 0] = (double)tcol.R;
+					texture[i, j, 1] = (double)tcol.G;
+					texture[i, j, 2] = (double)tcol.B;
+				
+				}
+			
+			}
+			
+			tWidth = text_.Width;
+			tHeight = text_.Height;
+			
+			//texture = text_;
+			return true;
+		}
+		
+		//get
 
 		public double getDiffuse ()
 		{

@@ -93,6 +93,7 @@
     <Compile Include="scene\lights\Light.cs" />
     <Compile Include="scene\primitives\LightSphere.cs" />
     <Compile Include="scene\primitives\Triangle.cs" />
+    <Compile Include="scene\primitives\Quad.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainWindow.xib" />
