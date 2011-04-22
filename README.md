@@ -34,7 +34,7 @@ Lights:
 
 Pictures
 -----------
-![cornell box in volk](https://github.com/pjpe/volk-renderer/raw/master/dev%20pics/version%200.3/cornellbasic.jpg "The Cornell box in Volk (no global illumination or radiosity)")
+![volk](https://github.com/pjpe/volk-renderer/raw/master/dev%20pics/version%200.3/cornellbasic.jpg "The Cornell box in Volk, no global illumination or radiosity")
 
 ![volk](https://github.com/pjpe/volk-renderer/raw/master/dev%20pics/version%200.3/messing%20with%20fov/testspheretexture1.jpg "Basic scene with textures")
 
