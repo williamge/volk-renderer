@@ -74,7 +74,7 @@ namespace volkrenderer
 			shadowrays = 0;
 			#endif			
 			
-			double aacoef = 0.25;
+			double aacoef = 1.0;
 #if THREADING
 #else
 			double[] pcol_ = new double[3];
@@ -215,11 +215,14 @@ namespace volkrenderer
 						
 #else
 					
-					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 0.5) {
-						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 0.5) {
+					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 1.5) {
+						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 1.5) {
 							Vector3d dirprime = (fovx * camx * (offx - scene.ImageWidth / 2)) + (fovy * camy * -(offy - scene.ImageHeight / 2)) + camz - origin;
 							//Vector3d dirprime = new Vector3d (offx - im.Width / 2, -(offy - im.Height / 2), 0) - origin;
 							dirprime.Normalize ();
+											if (x == 319 && y == 76){
+					x = x;
+				}
 							pcol_ = trace (origin, dirprime, scene, 0);
 							pcol[0] += aacoef * pcol_[0];
 							pcol[1] += aacoef * pcol_[1];
@@ -318,11 +321,13 @@ namespace volkrenderer
 				
 				//Color pcol;
 				double[] pcol = new double[3] {0.0,0.0,0.0};
-				
-				if (cobject.isLight ()) 
+			
+					/* TODO:
+					 * either fix this or get rid of it completely */
+			/*	if (cobject.isLight ()) 
 				{
 					return cobject.getColour(intersectp);
-				}			
+				}*/			
 				
 				foreach (Light li in scene.getLights ()) {
 					Vector3d Lp = li.getPoint ();
@@ -423,7 +428,7 @@ namespace volkrenderer
 			
 			foreach (Primitive spr in scene.getPrims ())
 			{
-				if (spr != cobject && spr != li)
+				if (!spr.isLight() && spr != cobject && spr != li)
 				{
 					double objintersect = spr.intersect (p, L);
 					if (objintersect > 0.0 && objintersect <= lilength) 

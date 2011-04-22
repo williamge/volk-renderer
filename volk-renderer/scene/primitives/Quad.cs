@@ -23,6 +23,8 @@ namespace volkrenderer
 		double[,,] texture;
 		int tWidth, tHeight;
 		
+		bool islight;
+		
 		public Quad (Vector3d p1_, Vector3d p2_, Vector3d p3_, Vector3d p4_, Color col_)
 		{
 			p1 = p1_;
@@ -44,10 +46,10 @@ namespace volkrenderer
 			};
 			
 			for (int n = 0; n < 2; n++) {
-				triangles[n].setDiffuse(diffuse);
-				triangles[n].setSpecular( specular);
+				triangles[n].setDiffuse (diffuse);
+				triangles[n].setSpecular (specular);
 				triangles[n].setAmbient (ambient);
-				triangles[n].setReflect( reflectd);
+				triangles[n].setReflect (reflectd);
 				triangles[n].setTransparency (transparency);
 			}
 			
@@ -58,6 +60,8 @@ namespace volkrenderer
 			specular = 0.5;
 			reflectd = 0.0;
 			transparency = 0.0;
+			
+			islight = false;
 			
 			texture = null;
 			
@@ -169,6 +173,11 @@ namespace volkrenderer
 			return true;
 		}
 		
+		public void setLight ()
+		{
+			islight = true;
+		}
+		
 		//get
 		
 		public double[] getColour (OpenTK.Vector3d p)
@@ -208,7 +217,7 @@ namespace volkrenderer
 
 		public bool isLight ()
 		{
-			return false;
+			return islight;
 		}
 		#endregion
 	}

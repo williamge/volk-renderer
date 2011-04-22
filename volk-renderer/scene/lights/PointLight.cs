@@ -25,8 +25,7 @@ namespace volkrenderer
 			colour[2] = col_.B;
 			
 			intensity = 1.0;
-			radius = (int)(5.0 * intensity);
-			//viewSphere = new LightSphere (col_, p, (int)(5.0 * intensity),this);
+			radius = (int)(3.0 * (1.0 + intensity));			
 			scene.addPrim (this);
 		}
 		
@@ -42,8 +41,23 @@ namespace volkrenderer
 			colour[2] = col_.B;
 			
 			intensity = intensity_;
-			radius = (int)(5.0 * intensity);
-			//viewSphere = new LightSphere (col_, p, (int)(5.0 * intensity),this);
+			radius = (int)(3.0 * (1.0 + intensity));
+			scene.addPrim (this);
+		}
+		
+		public PointLight (Vector3d p, Color col_, double intensity_, vScene scene,bool isthisusedforarealights)
+		{
+			points = new List<Vector3d> ();
+			points.Add (p);
+			point = p;
+			
+			colour = new double[3];
+			colour[0] = col_.R;
+			colour[1] = col_.G;
+			colour[2] = col_.B;
+			
+			intensity = intensity_;
+			radius = 0;
 			scene.addPrim (this);
 		}
 		

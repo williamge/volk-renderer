@@ -69,7 +69,31 @@ namespace volkrenderer
 		
 		public bool addPointLight (Vector3d p_, Color col_, double t_)
 		{
-			lights.Add (new PointLight (p_, col_,t_,this));
+			lights.Add (new PointLight (p_, col_, t_, this));
+			return true;
+		}
+		
+		public bool addAreaLight (Vector3d p1_, Vector3d p2_, Vector3d p3_, Vector3d p4_, Color col_, double t_)
+		{
+			double lightnum = 7.0;
+			Random monteoffset = new Random();
+			
+			for (int i = 0;i<=lightnum;i++){
+				for (int j = 0;j<=lightnum;j++){
+					/* TODO
+					 * change or fix or do something so this works on more than just the xz-axis plane */
+					lights.Add(new PointLight(p1_ + new Vector3d(((p2_.X-p1_.X)/lightnum * monteoffset.NextDouble() ) + i * (p2_.X-p1_.X)/lightnum,
+													0,
+													((p4_.Z-p1_.Z)/lightnum * monteoffset.NextDouble() ) + j * (p4_.Z-p1_.Z)/lightnum),
+							col_, t_ / Math.Pow(lightnum + 1, 2), this,true));
+				}
+			}
+			Quad aq = new Quad(p1_,p2_,p3_,p4_,col_);
+			aq.setAmbient(1.0);
+			aq.setDiffuse(0.0);
+			aq.setSpecular(0.0);
+			aq.setLight();
+			prims.Add(aq);
 			return true;
 		}
 		

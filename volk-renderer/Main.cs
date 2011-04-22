@@ -142,7 +142,16 @@ namespace volkrenderer
 				new Vector3d (278, 278, 0), 
 				Color.Green);
 			
-			cbvs.addPointLight (new Vector3d (0, 276, 278), Color.White);
+			//cbvs.addPointLight (new Vector3d (0, 276, 278), Color.White);
+			cbvs.addAreaLight (
+				new Vector3d (-50, 276, 228),
+				new Vector3d (50, 276, 228),
+				new Vector3d (50, 276, 328),
+				new Vector3d (-50, 276, 328),
+				Color.White, 1.0);
+				
+			
+				
 			
 			floor.setAmbient (0.0);
 			ceiling.setAmbient (0.0);
@@ -162,7 +171,7 @@ namespace volkrenderer
 			leftwall.setSpecular (0.0);
 			rightwall.setSpecular (0.0);
 			
-			cbvs.addSphere (new Vector3d (-140, -178, 275), 100, Color.White);
+			cbvs.addSphere (new Vector3d (-140, -178, 275), 100, Color.Blue);
 			
 			cbvs.addSphere (new Vector3d (80, -178, 325), 100, Color.White,0.5);			
 			
