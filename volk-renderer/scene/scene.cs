@@ -14,13 +14,15 @@ namespace volkrenderer
 		public Vector3d target;
 		public double exposure;
 		public double lightnums;
+		public int depth;
 		
 		public vScene (int width_, int height_)
 		{
 			ImageWidth = width_;
 			ImageHeight = height_;
 			
-			lightnums = 7.0;
+			lightnums = 3.0;
+			depth = 4;
 			
 			origin = new Vector3d (0, 0, -480);
 			target = new Vector3d (0, 0, 1);
@@ -28,6 +30,8 @@ namespace volkrenderer
 			/* TODO
 			 * make this user-settable */
 			exposure = -1.75f;
+			
+			
 		}
 		
 		public bool addPrim (Primitive p_)

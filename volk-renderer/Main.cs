@@ -28,12 +28,7 @@ namespace volkrenderer
 			
 			THEGODDAMNRELATIVEPATH = System.IO.Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location);
 			
-			
-			/* TODO
-			 * clean this up to make a good example scene */
-
-			//vScene vs = MainClass.defaultScene();
-			vScene vs = MainClass.CornellBox();
+			vScene vs = MainClass.CornellBox ();
 			
 			long Frequency, Ticks, TotalTime;
 			Stopwatch sw = new Stopwatch ();
@@ -144,11 +139,12 @@ namespace volkrenderer
 			
 			//cbvs.addPointLight (new Vector3d (0, 276, 278), Color.White);
 			cbvs.addAreaLight (
-				new Vector3d (-50, 276, 228),
-				new Vector3d (50, 276, 228),
-				new Vector3d (50, 276, 328),
-				new Vector3d (-50, 276, 328),
+				new Vector3d (-65, 277.99999, 227),
+				new Vector3d (65, 277.99999, 227),
+				new Vector3d (65, 277.99999, 332),
+				new Vector3d (-65, 277.99999, 332),
 				Color.White, 1.0);
+
 			
 			floor.setAmbient (0.0);
 			ceiling.setAmbient (0.0);
@@ -175,8 +171,8 @@ namespace volkrenderer
 			bluesphere.setDiffuse (1.0);
 			bluesphere.setSpecular (1.0);
 			cbvs.addPrim (bluesphere);*/
-			
-			Sphere bluesphere2 = new Sphere (Color.Black, new Vector3d (-140, -178, 375), 100);
+		
+			Sphere bluesphere2 = new Sphere (Color.Black, new Vector3d (120, -178, 400), 100);
 			bluesphere2.setRefract (1.3);
 			bluesphere2.setTransparency (0.7);
 			bluesphere2.setAmbient (0.0);
@@ -187,7 +183,119 @@ namespace volkrenderer
 			//cbvs.addSphere (new Vector3d (-140, -178, 275), 100, Color.Blue);
 			
 			
-			Sphere reflectsphere = new Sphere ( Color.Black,new Vector3d (80, -178, 325), 100, 1.0);
+			Sphere reflectsphere = new Sphere (Color.Black, new Vector3d (-91, -178, 300), 100, 1.0);
+			reflectsphere.setSpecular (0.7);
+			reflectsphere.setAmbient (0.0);
+			cbvs.addPrim (reflectsphere);
+			
+			cbvs.addPrim (floor);
+			cbvs.addPrim (ceiling);
+			cbvs.addPrim (backwall);
+			cbvs.addPrim (leftwall);
+			cbvs.addPrim (rightwall);
+			
+			return cbvs;
+		
+
+				
+
+		}
+		
+		static vScene reflectionBox ()
+		
+		{
+			vScene cbvs = new vScene (640, 480);			
+			
+			cbvs.origin = new Vector3d (0, -50, -350);
+			cbvs.target = new Vector3d (0, -50, 0);
+			
+			Quad floor = new Quad (
+				new Vector3d (278, -278, 0.0), 
+				new Vector3d (-278, -278, 0.0),
+				new Vector3d (-278, -278, 556),
+				new Vector3d (278, -278, 556),
+				Color.Gray);
+			
+			Quad ceiling = new Quad (
+				new Vector3d (-278, 278, 0.0),
+				new Vector3d (278, 278, 0.0),
+				new Vector3d (278, 278, 556),
+				new Vector3d (-278, 278, 556),
+				Color.Gray);
+			
+			Quad backwall = new Quad (
+				new Vector3d (278, -278, 556), 
+				new Vector3d (-278, -278, 556),
+				new Vector3d (-278, 278, 556),
+				new Vector3d (278, 278, 556),
+				Color.Blue);
+			
+			Quad leftwall = new Quad (
+				new Vector3d (-278, -278, 556), 
+				new Vector3d (-278, -278, 0.0),
+				new Vector3d (-278, 278, 0.0), 
+				new Vector3d (-278, 278, 556), 
+				Color.Red);
+			
+			Quad rightwall = new Quad (
+				new Vector3d (278, -278, 0),
+				new Vector3d (278, -278, 556),
+				new Vector3d (278, 278, 556),
+				new Vector3d (278, 278, 0), 
+				Color.Green);
+			
+			//cbvs.addPointLight (new Vector3d (0, 276, 278), Color.White);
+			cbvs.addAreaLight (
+				new Vector3d (-65, 277.99999, 227),
+				new Vector3d (65, 277.99999, 227),
+				new Vector3d (65, 277.99999, 332),
+				new Vector3d (-65, 277.99999, 332),
+				Color.Gray, 0.7);
+
+			
+			floor.setAmbient (0.0);
+			ceiling.setAmbient (0.0);
+			backwall.setAmbient (0.0);
+			leftwall.setAmbient (0.0);
+			rightwall.setAmbient (0.0);
+			
+			floor.setDiffuse (1.0);
+			ceiling.setDiffuse (1.0);
+			backwall.setDiffuse (1.0);
+			leftwall.setDiffuse (1.0);
+			rightwall.setDiffuse (1.0);
+			
+			floor.setSpecular (0.0);
+			ceiling.setSpecular (0.0);
+			backwall.setSpecular (0.0);
+			leftwall.setSpecular (0.0);
+			rightwall.setSpecular (0.0);
+			
+			floor.setReflect (1.0);
+			ceiling.setReflect (1.0);
+			backwall.setReflect (1.0);
+			leftwall.setReflect (1.0);
+			rightwall.setReflect (1.0);
+			
+			/*Sphere bluesphere = new Sphere (Color.Blue, new Vector3d (-140, -178, 275), 100);
+			//bluesphere.setRefract(1.3);
+			//bluesphere.setTransparency(0.5);
+			bluesphere.setAmbient (0.0);
+			bluesphere.setDiffuse (1.0);
+			bluesphere.setSpecular (1.0);
+			cbvs.addPrim (bluesphere);*/
+			
+			Sphere bluesphere2 = new Sphere (Color.Black, new Vector3d (120, -178, 400), 100);
+			bluesphere2.setRefract (1.3);
+			bluesphere2.setTransparency (0.7);
+			bluesphere2.setAmbient (0.0);
+			bluesphere2.setDiffuse (0.2);
+			bluesphere2.setSpecular (1.0);
+			cbvs.addPrim (bluesphere2);
+			
+			//cbvs.addSphere (new Vector3d (-140, -178, 275), 100, Color.Blue);			
+			
+			Sphere reflectsphere = new Sphere ( Color.Black,new Vector3d (-91, -178, 300), 100, 1.0);
 			reflectsphere.setSpecular (0.7);
 			reflectsphere.setAmbient (0.0);
 			cbvs.addPrim (reflectsphere);
@@ -199,10 +307,6 @@ namespace volkrenderer
 			cbvs.addPrim(rightwall);			
 			
 			return cbvs;
-				
-
-				
-
 		}
 	}
 }

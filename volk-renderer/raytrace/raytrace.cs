@@ -21,6 +21,8 @@ namespace volkrenderer
 	{
 		Bitmap im;
 		
+		int DEPTHLIMIT;
+		
 		Vector3d camx,camy,camz;
 		
 		/* for performance reasons (to avoid the use of Bitmap.getPixel/setPixel) the image (and textures)
@@ -38,6 +40,8 @@ namespace volkrenderer
 		{
 			im = new Bitmap (scene.ImageWidth, scene.ImageHeight);
 			dimage = new double[scene.ImageWidth,scene.ImageHeight,3];
+			
+			DEPTHLIMIT = scene.depth;
 			
 			Vector3d origin = scene.origin;			
 			Vector3d target = scene.target;
@@ -75,7 +79,7 @@ namespace volkrenderer
 			shadowrays = 0;
 			#endif			
 			
-			double aacoef = 1.0;//0.25;
+			double aacoef = 0.25;
 #if THREADING
 #else
 			double[] pcol_ = new double[3];
@@ -216,8 +220,8 @@ namespace volkrenderer
 						
 #else
 					
-					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 10.5) {
-						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 10.5) {
+					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 0.5) {
+						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 0.5) {
 							Vector3d dirprime = (fovx * camx * (offx - scene.ImageWidth / 2)) + (fovy * camy * -(offy - scene.ImageHeight / 2)) + camz - origin;
 							//Vector3d dirprime = new Vector3d (offx - im.Width / 2, -(offy - im.Height / 2), 0) - origin;
 							dirprime.Normalize ();
@@ -231,6 +235,7 @@ namespace volkrenderer
 					
 					//exposures, may not be useful idk
 					double exposure = scene.exposure;
+					/*
 					pcol[0] = 255.0 * (1.0 - Math.Exp (pcol[0] / 255.0 * exposure));
 					pcol[1] = 255.0 * (1.0 - Math.Exp (pcol[1] / 255.0 * exposure));
 					pcol[2] = 255.0 * (1.0 - Math.Exp (pcol[2] / 255.0 * exposure));
@@ -238,7 +243,7 @@ namespace volkrenderer
 					//gamma correction, may be wrong or unnecessary
 					pcol[0] = pcol[0] * Math.Pow (pcol[0] / 255.0, 1.0 / 2.2);
 					pcol[1] = pcol[1] * Math.Pow (pcol[1] / 255.0, 1.0 / 2.2);
-					pcol[2] = pcol[2] * Math.Pow (pcol[2] / 255.0, 1.0 / 2.2);
+					pcol[2] = pcol[2] * Math.Pow (pcol[2] / 255.0, 1.0 / 2.2);*/
 					
 					pcol[0] = Math.Max (Math.Min (255, pcol[0]), 0);
 					pcol[1] = Math.Max (Math.Min (255, pcol[1]), 0);
@@ -284,7 +289,7 @@ namespace volkrenderer
 		double[] trace (Vector3d origin, Vector3d direction, vScene scene, int rdepth)
 		{
 			
-			if (rdepth > 4) {
+			if (rdepth > DEPTHLIMIT) {
 				#if CONSFLAGD
 				killedrays++;
 				#endif
