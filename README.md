@@ -34,6 +34,9 @@ Lights:
 
 Pictures
 -----------
+The Cornell Box with soft shadows from an area light.
+![cornell box in volk](https://github.com/pjpe/volk-renderer/raw/master/dev%20pics/version%200.3/softshadows.jpg "The Cornell box in volk without GI or radiosity")
+The Cornell Box again but with a point light lighting the scene.
 ![volk](https://github.com/pjpe/volk-renderer/raw/master/dev%20pics/version%200.3/cornellbasic.jpg "The Cornell box in Volk, no global illumination or radiosity")
 
 ![volk](https://github.com/pjpe/volk-renderer/raw/master/dev%20pics/version%200.3/messing%20with%20fov/testspheretexture1.jpg "Basic scene with textures")
