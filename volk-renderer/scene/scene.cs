@@ -13,18 +13,21 @@ namespace volkrenderer
 		public Vector3d origin;
 		public Vector3d target;
 		public double exposure;
+		public double lightnums;
 		
 		public vScene (int width_, int height_)
 		{
 			ImageWidth = width_;
 			ImageHeight = height_;
 			
+			lightnums = 7.0;
+			
 			origin = new Vector3d (0, 0, -480);
 			target = new Vector3d (0, 0, 1);
 			
 			/* TODO
 			 * make this user-settable */
-			exposure = -2.0f;
+			exposure = -1.75f;
 		}
 		
 		public bool addPrim (Primitive p_)
@@ -75,7 +78,7 @@ namespace volkrenderer
 		
 		public bool addAreaLight (Vector3d p1_, Vector3d p2_, Vector3d p3_, Vector3d p4_, Color col_, double t_)
 		{
-			double lightnum = 7.0;
+			double lightnum = this.lightnums;
 			Random monteoffset = new Random();
 			
 			for (int i = 0;i<=lightnum;i++){

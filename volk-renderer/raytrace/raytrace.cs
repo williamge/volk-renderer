@@ -5,6 +5,7 @@
 #define SPECULAR
 #define SHADOWS
 #define REFLECTION
+#define REFRACTION
 
 using System;
 using System.Drawing;
@@ -74,7 +75,7 @@ namespace volkrenderer
 			shadowrays = 0;
 			#endif			
 			
-			double aacoef = 1.0;
+			double aacoef = 1.0;//0.25;
 #if THREADING
 #else
 			double[] pcol_ = new double[3];
@@ -215,14 +216,12 @@ namespace volkrenderer
 						
 #else
 					
-					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 1.5) {
-						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 1.5) {
+					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 10.5) {
+						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 10.5) {
 							Vector3d dirprime = (fovx * camx * (offx - scene.ImageWidth / 2)) + (fovy * camy * -(offy - scene.ImageHeight / 2)) + camz - origin;
 							//Vector3d dirprime = new Vector3d (offx - im.Width / 2, -(offy - im.Height / 2), 0) - origin;
 							dirprime.Normalize ();
-											if (x == 319 && y == 76){
-					x = x;
-				}
+											
 							pcol_ = trace (origin, dirprime, scene, 0);
 							pcol[0] += aacoef * pcol_[0];
 							pcol[1] += aacoef * pcol_[1];
@@ -384,11 +383,12 @@ namespace volkrenderer
 				pcol[1] += (ambient * cobject.getColour (intersectp)[1]);
 				pcol[2] += (ambient * cobject.getColour (intersectp)[2]);
 				
+				Vector3d N = cobject.normal (intersectp);
 				#if REFLECTION
 				//reflection
 				if (cobject.getReflect () > 0) {
 					
-					Vector3d N = cobject.normal (intersectp);
+					
 					Vector3d reflectray = direction - (2.0 * (Vector3d.Dot (N, direction))) * N;
 					reflectray.Normalize ();
 					
@@ -398,6 +398,23 @@ namespace volkrenderer
 					pcol[1] += (cobject.getReflect () * rcol[1]);
 					pcol[2] += (cobject.getReflect () * rcol[2]);
 				}
+				#endif
+					
+				#if REFRACTION
+				if (cobject.getTransparency() > 0.0){
+						
+						double n = 1.0/cobject.getRefract();
+						double cosI = - Vector3d.Dot(N,direction);
+						double cosT2 = (1.0 - n * n) * (1.0 - cosI * cosI);
+						if (cosT2 > 0.0){
+							Vector3d T = (n * direction) + (n * cosI - Math.Sqrt(cosT2)) * N;
+							T.Normalize();
+							double[] rrcol = trace(intersectp + 0.15 * T,T,scene,rdepth + 1);
+							pcol[0] += (cobject.getTransparency() * rrcol[0]);
+							pcol[1] += (cobject.getTransparency() * rrcol[1]);
+							pcol[2] += (cobject.getTransparency() * rrcol[2]);
+						}
+					}
 				#endif
 				
 				return pcol;

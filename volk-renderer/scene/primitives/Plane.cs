@@ -190,6 +190,11 @@ namespace volkrenderer
 			return reflectd;
 		}
 		
+		public double getRefract ()
+		{
+			return 1.0;
+		}
+		
 		public bool isLight (){return false;}
 
 		//set

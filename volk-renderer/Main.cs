@@ -104,8 +104,8 @@ namespace volkrenderer
 			vScene cbvs = new vScene (640, 480);
 			
 			
-			cbvs.origin = new Vector3d (0, 0, -273);
-			cbvs.target = new Vector3d (0, 0, 0);
+			cbvs.origin = new Vector3d (0, -50, -350);
+			cbvs.target = new Vector3d (0, -50, 0);
 			
 			Quad floor = new Quad (
 				new Vector3d (278, -278, 0.0), 
@@ -149,9 +149,6 @@ namespace volkrenderer
 				new Vector3d (50, 276, 328),
 				new Vector3d (-50, 276, 328),
 				Color.White, 1.0);
-				
-			
-				
 			
 			floor.setAmbient (0.0);
 			ceiling.setAmbient (0.0);
@@ -171,9 +168,29 @@ namespace volkrenderer
 			leftwall.setSpecular (0.0);
 			rightwall.setSpecular (0.0);
 			
-			cbvs.addSphere (new Vector3d (-140, -178, 275), 100, Color.Blue);
+			/*Sphere bluesphere = new Sphere (Color.Blue, new Vector3d (-140, -178, 275), 100);
+			//bluesphere.setRefract(1.3);
+			//bluesphere.setTransparency(0.5);
+			bluesphere.setAmbient (0.0);
+			bluesphere.setDiffuse (1.0);
+			bluesphere.setSpecular (1.0);
+			cbvs.addPrim (bluesphere);*/
 			
-			cbvs.addSphere (new Vector3d (80, -178, 325), 100, Color.White,0.5);			
+			Sphere bluesphere2 = new Sphere (Color.Black, new Vector3d (-140, -178, 375), 100);
+			bluesphere2.setRefract (1.3);
+			bluesphere2.setTransparency (0.7);
+			bluesphere2.setAmbient (0.0);
+			bluesphere2.setDiffuse (0.2);
+			bluesphere2.setSpecular (1.0);
+			cbvs.addPrim (bluesphere2);
+			
+			//cbvs.addSphere (new Vector3d (-140, -178, 275), 100, Color.Blue);
+			
+			
+			Sphere reflectsphere = new Sphere ( Color.Black,new Vector3d (80, -178, 325), 100, 1.0);
+			reflectsphere.setSpecular (0.7);
+			reflectsphere.setAmbient (0.0);
+			cbvs.addPrim (reflectsphere);
 			
 			cbvs.addPrim (floor);
 			cbvs.addPrim (ceiling);

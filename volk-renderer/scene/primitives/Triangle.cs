@@ -200,6 +200,12 @@ namespace volkrenderer
 		{
 			return ambient;
 		}
+		
+		public double getRefract ()
+		
+		{
+			return 1.0;
+		}
 
 		public bool isLight ()
 		{

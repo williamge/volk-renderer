@@ -245,6 +245,11 @@ namespace volkrenderer
 		{
 			return 0.2;
 		}
+		
+		public double getRefract ()
+		{
+			return 1.0;
+		}
 
 		public bool isLight ()
 		{

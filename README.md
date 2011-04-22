@@ -13,7 +13,7 @@ Features so far:
 
 * ray casting
 * Phong shading
-* multiple depth reflections
+* multiple depth reflections and refractions
 * textures
 * naive anti-aliasing
 * threading (slow and might be broken)
@@ -30,6 +30,7 @@ Shapes:
 Lights:
 
 * point light
+* area lights
 
 
 Pictures

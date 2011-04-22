@@ -16,6 +16,7 @@ namespace volkrenderer
 		double diffuse;
 		double specular;
 		double transparency;
+		double refract;
 		
 		double[,,] texture;
 		int tWidth, tHeight;
@@ -39,6 +40,7 @@ namespace volkrenderer
 			specular = 1.0/3.0;
 			transparency = 0.0;
 			ambient = 1.0/3.0;
+			refract = 1.0;
 			
 			texture = null;
 		}
@@ -57,6 +59,9 @@ namespace volkrenderer
 			specular = 1.0 / 3.0;
 			transparency = 0.0;
 			ambient = 1.0 / 3.0;
+			refract = 1.0;
+			
+			texture = null;
 		}
 		
 		public double intersect (Vector3d d0, Vector3d d1)
@@ -75,7 +80,7 @@ namespace volkrenderer
 			
 			t2 = Math.Sqrt (t2);
 			t = - Vector3d.Dot (v, d1);
-			t = Math.Min (t + t2, t - t2);
+			t = Math.Min (Math.Max( t + t2,0), Math.Max( t - t2,0));
 			
 			return t;
 		
@@ -86,6 +91,10 @@ namespace volkrenderer
 		public Vector3d normal (Vector3d point)
 		{
 			Vector3d N = point - center;
+			if (N.Length < radius - 0.1) 
+			{
+				N = -N;
+			}
 			N.Normalize ();
 			return N;
 		}
@@ -154,6 +163,12 @@ namespace volkrenderer
 			return reflectd;
 		}
 		
+		public double getRefract ()
+		
+		{
+			return refract;
+		}
+		
 		public bool isLight(){return false;}
 	
 		
@@ -174,6 +189,13 @@ namespace volkrenderer
 			return true;
 		}
 		
+		public bool setAmbient (double a_)
+		
+		{
+			ambient = a_;
+			return true;
+		}
+		
 		public bool setSpecular (double s_)
 		{
 			specular = s_;
@@ -191,6 +213,13 @@ namespace volkrenderer
 			transparency = t_;
 			return true;
 		}
+		
+		public bool setRefract (double r_)
+		{
+			refract = r_;
+			return true;
+		}
+		
 		
 		public bool setTexture (Bitmap text_)
 
