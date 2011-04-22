@@ -32,7 +32,8 @@ namespace volkrenderer
 			/* TODO
 			 * clean this up to make a good example scene */
 
-			vScene vs = MainClass.defaultScene();
+			//vScene vs = MainClass.defaultScene();
+			vScene vs = MainClass.CornellBox();
 			
 			long Frequency, Ticks, TotalTime;
 			Stopwatch sw = new Stopwatch ();
@@ -59,6 +60,7 @@ namespace volkrenderer
 		static vScene defaultScene ()
 		{
 			vScene vs = new vScene (640, 480);
+			
 			Sphere tsphere = new Sphere (Color.Blue, new Vector3d (0, -10, 100), 90);
 			
 			#if WINDOWS
@@ -73,7 +75,8 @@ namespace volkrenderer
 			tsphere.setTexture (new Bitmap (THEGODDAMNRELATIVEPATH + "/" + "dog.jpg"));
 			#endif
 			//vs.addPrim (tsphere);
-			vs.addSphere (new Vector3d (-200, 0, 175), 90, Color.Gray, 0.5);
+			//vs.addSphere (new Vector3d (-200, 0, 175), 90, Color.Gray, 0.5);
+			
 			vs.addPointLight (new Vector3d (-120, 120, 0), Color.White, 1.0);
 			vs.addPointLight (new Vector3d (-120, 120, -20), Color.Gray, 1.0);
 			Plane pl = new Plane (new Vector3d (0, -100, -480), new Vector3d (0, 1, 0), Color.DarkSalmon);
@@ -89,7 +92,91 @@ namespace volkrenderer
 			vs.addPrim(tr);
 			Console.WriteLine (pl.setTexture (checker));
 			Console.WriteLine (vs.addPrim (pl));
+			
+			Teapot teap = new Teapot();
+			vs.addPrim(teap);
+			
 			return vs;
+		}
+		
+		static vScene CornellBox ()
+		{
+			vScene cbvs = new vScene (640, 480);
+			
+			
+			cbvs.origin = new Vector3d (0, 0, -273);
+			cbvs.target = new Vector3d (0, 0, 0);
+			
+			Quad floor = new Quad (
+				new Vector3d (278, -278, 0.0), 
+				new Vector3d (-278, -278, 0.0),
+				new Vector3d (-278, -278, 556),
+				new Vector3d (278, -278, 556),
+				Color.White);
+			
+			Quad ceiling = new Quad (
+				new Vector3d (-278, 278, 0.0),
+				new Vector3d (278, 278, 0.0),
+				new Vector3d (278, 278, 556),
+				new Vector3d (-278, 278, 556),
+				Color.White);
+			
+			Quad backwall = new Quad (
+				new Vector3d (278, -278, 556), 
+				new Vector3d (-278, -278, 556),
+				new Vector3d (-278, 278, 556),
+				new Vector3d (278, 278, 556),
+				Color.White);
+			
+			Quad leftwall = new Quad (
+				new Vector3d (-278, -278, 556), 
+				new Vector3d (-278, -278, 0.0),
+				new Vector3d (-278, 278, 0.0), 
+				new Vector3d (-278, 278, 556), 
+				Color.Red);
+			
+			Quad rightwall = new Quad (
+				new Vector3d (278, -278, 0),
+				new Vector3d (278, -278, 556),
+				new Vector3d (278, 278, 556),
+				new Vector3d (278, 278, 0), 
+				Color.Green);
+			
+			cbvs.addPointLight (new Vector3d (0, 276, 278), Color.White);
+			
+			floor.setAmbient (0.0);
+			ceiling.setAmbient (0.0);
+			backwall.setAmbient (0.0);
+			leftwall.setAmbient (0.0);
+			rightwall.setAmbient (0.0);
+			
+			floor.setDiffuse (1.0);
+			ceiling.setDiffuse (1.0);
+			backwall.setDiffuse (1.0);
+			leftwall.setDiffuse (1.0);
+			rightwall.setDiffuse (1.0);
+			
+			floor.setSpecular (0.0);
+			ceiling.setSpecular (0.0);
+			backwall.setSpecular (0.0);
+			leftwall.setSpecular (0.0);
+			rightwall.setSpecular (0.0);
+			
+			cbvs.addSphere (new Vector3d (-140, -178, 275), 100, Color.White);
+			
+			cbvs.addSphere (new Vector3d (80, -178, 325), 100, Color.White,0.5);			
+			
+			cbvs.addPrim (floor);
+			cbvs.addPrim (ceiling);
+			cbvs.addPrim(backwall);
+			cbvs.addPrim(leftwall);
+			cbvs.addPrim(rightwall);			
+			
+			return cbvs;
+				
+
+				
+
 		}
 	}
 }

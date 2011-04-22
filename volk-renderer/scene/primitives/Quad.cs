@@ -30,6 +30,8 @@ namespace volkrenderer
 			p3 = p3_;
 			p4 = p4_;
 			
+			colour = new double[3] { col_.R, col_.G, col_.B };
+			
 			ubasis = p2_ - p1_;
 			vbasis = p4_ - p1_;
 			
@@ -49,7 +51,7 @@ namespace volkrenderer
 				triangles[n].setTransparency (transparency);
 			}
 			
-			colour = new double[3] { col_.R, col_.G, col_.B };
+			
 			
 			ambient = 0.3;
 			diffuse = 1.0;

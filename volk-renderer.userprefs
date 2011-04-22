@@ -1,28 +1,30 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="WindowsR" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="volk-renderer/raytrace/raytrace.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Console" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="volk-renderer/scene/primitives/Teapot.cs">
     <Files>
-      <File FileName="volk-renderer/raytrace/raytrace.cs" Line="405" Column="34" />
+      <File FileName="volk-renderer/raytrace/raytrace.cs" Line="222" Column="30" />
       <File FileName="volk-renderer/scene/scene.cs" Line="26" Column="33" />
       <File FileName="volk-renderer/scene/primitives/Primitive.cs" Line="12" Column="10" />
-      <File FileName="volk-renderer/scene/primitives/Sphere.cs" Line="213" Column="27" />
-      <File FileName="volk-renderer/scene/primitives/Plane.cs" Line="97" Column="33" />
+      <File FileName="volk-renderer/scene/primitives/Sphere.cs" Line="160" Column="1" />
+      <File FileName="volk-renderer/scene/primitives/Plane.cs" Line="8" Column="3" />
       <File FileName="volk-renderer/scene/lights/PointLight.cs" Line="42" Column="23" />
       <File FileName="volk-renderer/scene/lights/Light.cs" Line="10" Column="10" />
-      <File FileName="volk-renderer/Main.cs" Line="52" Column="7" />
-      <File FileName="volk-renderer/scene/primitives/Triangle.cs" Line="59" Column="56" />
+      <File FileName="volk-renderer/Main.cs" Line="96" Column="21" />
+      <File FileName="volk-renderer/scene/primitives/Triangle.cs" Line="13" Column="1" />
       <File FileName="volk-renderer/scene/primitives/LightSphere.cs" Line="6" Column="26" />
+      <File FileName="volk-renderer/scene/primitives/Quad.cs" Line="142" Column="35" />
+      <File FileName="volk-renderer/scene/primitives/Teapot.cs" Line="186" Column="23" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="volk-renderer" expanded="True">
-            <Node name="raytrace" expanded="True">
-              <Node name="raytrace.cs" selected="True" />
-            </Node>
+            <Node name="raytrace" expanded="True" />
             <Node name="scene" expanded="True">
               <Node name="lights" expanded="True" />
-              <Node name="primitives" expanded="True" />
+              <Node name="primitives" expanded="True">
+                <Node name="Teapot.cs" selected="True" />
+              </Node>
             </Node>
             <Node name="MainWindow.xib" expanded="True" />
           </Node>

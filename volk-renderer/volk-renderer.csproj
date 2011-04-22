@@ -94,6 +94,7 @@
     <Compile Include="scene\primitives\LightSphere.cs" />
     <Compile Include="scene\primitives\Triangle.cs" />
     <Compile Include="scene\primitives\Quad.cs" />
+    <Compile Include="scene\primitives\Teapot.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainWindow.xib" />

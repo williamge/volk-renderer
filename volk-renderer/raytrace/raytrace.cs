@@ -206,7 +206,7 @@ namespace volkrenderer
 					pcol[2] = Math.Max (Math.Min (255, pcol[2]), 0);
 					
 					dimage[x,y,0] = pcol[0];
-					dimage[x,y,1] = pcol[2];
+					dimage[x,y,1] = pcol[1];
 					dimage[x,y,2] = pcol[2];
 					
 						}});
@@ -220,7 +220,6 @@ namespace volkrenderer
 							Vector3d dirprime = (fovx * camx * (offx - scene.ImageWidth / 2)) + (fovy * camy * -(offy - scene.ImageHeight / 2)) + camz - origin;
 							//Vector3d dirprime = new Vector3d (offx - im.Width / 2, -(offy - im.Height / 2), 0) - origin;
 							dirprime.Normalize ();
-							
 							pcol_ = trace (origin, dirprime, scene, 0);
 							pcol[0] += aacoef * pcol_[0];
 							pcol[1] += aacoef * pcol_[1];
@@ -244,7 +243,7 @@ namespace volkrenderer
 					pcol[2] = Math.Max (Math.Min (255, pcol[2]), 0);		
 					
 					dimage[x,y,0] = pcol[0];
-					dimage[x,y,1] = pcol[2];
+					dimage[x,y,1] = pcol[1];
 					dimage[x,y,2] = pcol[2];									
 	
 				}
@@ -419,6 +418,7 @@ namespace volkrenderer
 			/* TODO */
 			/*at some point (adding area lights) i'll have to change this so it accounts for all the points not just the center */
 			Vector3d L = li.getPoint () - p;
+			double lilength = L.Length;
 			L.Normalize ();
 			
 			foreach (Primitive spr in scene.getPrims ())
@@ -426,7 +426,7 @@ namespace volkrenderer
 				if (spr != cobject && spr != li)
 				{
 					double objintersect = spr.intersect (p, L);
-					if (objintersect > 0.000001) 
+					if (objintersect > 0.0 && objintersect <= lilength) 
 					{
 						double objtrans = spr.getTransparency ();
 						if (objtrans == 0.0) 
