@@ -13,6 +13,7 @@ namespace volkrenderer
 		public Vector3d origin;
 		public Vector3d target;
 		public double exposure;
+		public double fov;
 		public double lightnums;
 		public int depth;
 		
@@ -23,13 +24,14 @@ namespace volkrenderer
 			
 			lightnums = 3.0;
 			depth = 4;
+			fov = 0.3;
 			
 			origin = new Vector3d (0, 0, -480);
 			target = new Vector3d (0, 0, 1);
 			
 			/* TODO
 			 * make this user-settable */
-			exposure = -1.75f;
+			exposure = -2.0f;
 			
 			
 		}

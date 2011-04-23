@@ -54,7 +54,7 @@ namespace volkrenderer
 			
 			//Math.PI / 4.0;
 			//enter fov here(on right)
-			double fovx = 1.0 - 0.3;
+			double fovx = 1.0 - scene.fov;
 			double fovy = fovx;
 			
 			fovx = Math.Tan (fovx);
@@ -64,8 +64,8 @@ namespace volkrenderer
 			camz.Normalize ();
 			Vector3d up = new Vector3d (0, 1, 0);
 			
-			camx = Vector3d.Cross (up, camz);
-			camy = Vector3d.Cross (camx, -camz);
+			camx =  Vector3d.Cross (up, camz);
+			camy =  Vector3d.Cross (camx, -camz);
 			
 			#if CONSFLAGD
 			Console.WriteLine (camz.ToString ());
@@ -87,6 +87,8 @@ namespace volkrenderer
 #endif
 			int iheight = im.Height;
 			int iwidth = im.Width;
+			
+			Vector3d camzz = camz * iwidth;
 			
 #if THREADING
 			
@@ -124,6 +126,10 @@ namespace volkrenderer
 #endif
 					
 #if THREADING				
+							
+							/* TODO
+							 * fix all this up, i changed the naive implementation's camera settings to
+							 * something more correct but didn't bother changing these */
 					
 					//
 					
@@ -222,7 +228,7 @@ namespace volkrenderer
 					
 					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 0.5) {
 						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 0.5) {
-							Vector3d dirprime = (fovx * camx * (offx - scene.ImageWidth / 2)) + (fovy * camy * -(offy - scene.ImageHeight / 2)) + camz - origin;
+							Vector3d dirprime = ((fovx * camx * (offx - iwidth / 2)) + (fovy * camy * -(offy - iheight / 2)) + camzz) ;//- origin;
 							//Vector3d dirprime = new Vector3d (offx - im.Width / 2, -(offy - im.Height / 2), 0) - origin;
 							dirprime.Normalize ();
 											
@@ -235,7 +241,7 @@ namespace volkrenderer
 					
 					//exposures, may not be useful idk
 					double exposure = scene.exposure;
-					/*
+					
 					pcol[0] = 255.0 * (1.0 - Math.Exp (pcol[0] / 255.0 * exposure));
 					pcol[1] = 255.0 * (1.0 - Math.Exp (pcol[1] / 255.0 * exposure));
 					pcol[2] = 255.0 * (1.0 - Math.Exp (pcol[2] / 255.0 * exposure));
@@ -243,7 +249,7 @@ namespace volkrenderer
 					//gamma correction, may be wrong or unnecessary
 					pcol[0] = pcol[0] * Math.Pow (pcol[0] / 255.0, 1.0 / 2.2);
 					pcol[1] = pcol[1] * Math.Pow (pcol[1] / 255.0, 1.0 / 2.2);
-					pcol[2] = pcol[2] * Math.Pow (pcol[2] / 255.0, 1.0 / 2.2);*/
+					pcol[2] = pcol[2] * Math.Pow (pcol[2] / 255.0, 1.0 / 2.2);
 					
 					pcol[0] = Math.Max (Math.Min (255, pcol[0]), 0);
 					pcol[1] = Math.Max (Math.Min (255, pcol[1]), 0);

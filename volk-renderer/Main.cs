@@ -99,8 +99,8 @@ namespace volkrenderer
 			vScene cbvs = new vScene (640, 480);
 			
 			
-			cbvs.origin = new Vector3d (0, -50, -350);
-			cbvs.target = new Vector3d (0, -50, 0);
+			cbvs.origin = new Vector3d (0, 0, -800);
+			cbvs.target = new Vector3d (0, 0, 0);
 			
 			Quad floor = new Quad (
 				new Vector3d (278, -278, 0.0), 
@@ -206,7 +206,7 @@ namespace volkrenderer
 		{
 			vScene cbvs = new vScene (640, 480);			
 			
-			cbvs.origin = new Vector3d (0, -50, -350);
+			cbvs.origin = new Vector3d (0, -50, -500);
 			cbvs.target = new Vector3d (0, -50, 0);
 			
 			Quad floor = new Quad (
@@ -250,7 +250,7 @@ namespace volkrenderer
 				new Vector3d (65, 277.99999, 227),
 				new Vector3d (65, 277.99999, 332),
 				new Vector3d (-65, 277.99999, 332),
-				Color.Gray, 0.7);
+				Color.Gray, 1.0);
 
 			
 			floor.setAmbient (0.0);
