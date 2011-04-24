@@ -1,4 +1,4 @@
-//#define THREADING
+#define THREADING
 #define CONSFLAGD
 #define AMBIENT
 #define DIFFUSE
@@ -91,15 +91,7 @@ namespace volkrenderer
 			Vector3d camzz = camz * iwidth;
 			
 #if THREADING
-			
-			Task<double[]>[] task = new Task<double[]>[4];
-			
-			
-			
-			
 			Parallel.For(0,iwidth,delegate(int x)	{
-			
-			/*for (int x = 0; x < iwidth; x++) {*/
 				for (int y = 0; y < iheight; y++) {
 					
 					double[] pcol_ = new double[3];
@@ -112,7 +104,6 @@ namespace volkrenderer
 					pcol[1] = 0;
 					pcol[2] = 0;
 #else
-			
 			for (int x = 0; x < iwidth; x++) {
 				for (int y = 0; y < iheight; y++) {
 				
@@ -122,109 +113,11 @@ namespace volkrenderer
 					pcol[0] = 0;
 					pcol[1] = 0;
 					pcol[2] = 0;
+
 					
 #endif
 					
-#if THREADING				
-							
-							/* TODO
-							 * fix all this up, i changed the naive implementation's camera settings to
-							 * something more correct but didn't bother changing these */
-					
-					//
-					
-					Vector3d dirprime = (fovx * camx * (x - iwidth / 2)) + (fovy * camy * -(y - iheight / 2)) + camz - origin;
-					dirprime.Normalize ();
-							
-					threadinfo[] tinfo = new threadinfo[4];
-					tinfo[0] = new threadinfo(origin, dirprime, scene);
 
-
-					task[0] = Task.Factory.StartNew (
-								(ti__) 
-								=>
-		 						{ return threadtrace (ti__); },tinfo[0] );
-					
-					//
-					
-					dirprime = (fovx * camx * (x + 0.5 - iwidth / 2)) + (fovy * camy * -(y - iheight / 2)) + camz - origin;
-					dirprime.Normalize ();
-					
-					tinfo[1] = new threadinfo(origin, dirprime, scene);
-
-					task[1] = Task.Factory.StartNew (
-								(ti__) 
-								=>
-		 						{ return threadtrace (ti__); },tinfo[1] );
-					
-					//
-					
-					dirprime = (fovx * camx * (x + 0.5 - iwidth / 2)) + (fovy * camy * -(y + 0.5 - iheight / 2)) + camz - origin;
-					dirprime.Normalize ();
-					
-					tinfo[2] = new threadinfo(origin, dirprime, scene);
-
-					task[2] = Task.Factory.StartNew (
-								(ti__) 
-								=>
-		 						{ return threadtrace (ti__); },tinfo[2] );
-					//
-					
-					dirprime = (fovx * camx * (x - iwidth / 2)) + (fovy * camy * -(y + 0.5 - iheight / 2)) + camz - origin;
-					dirprime.Normalize ();
-					
-					tinfo[3] = new threadinfo(origin, dirprime, scene);
-
-					task[3] = Task.Factory.StartNew (
-								(ti__) 
-								=>
-		 						{ return threadtrace (ti__); },tinfo[3] );
-					
-
-		
-					//Task.WaitAll (task[0], task[1], task[2], task[3]);
-					
-					//pcol_ = task[0].
-		
-					pcol[0] = 0.25 * task[0].Result[0] 
-							+ 0.25 * task[1].Result[0] 
-							+ 0.25 * task[2].Result[0] 
-							+ 0.25 * task[3].Result[0];
-					
-					pcol[1] = 0.25 * task[0].Result[1] 
-							+ 0.25 * task[1].Result[1] 
-							+ 0.25 * task[2].Result[1] 
-							+ 0.25 * task[3].Result[1];
-					
-					pcol[2] = 0.25 * task[0].Result[2] 
-							+ 0.25 * task[1].Result[2] 
-							+ 0.25 * task[2].Result[2] 
-							+ 0.25 * task[3].Result[2];
-					
-					//exposures, may not be useful idk
-					double exposure = scene.exposure;
-					pcol[0] = 255.0 * (1.0 - Math.Exp (pcol[0] / 255.0 * exposure));
-					pcol[1] = 255.0 * (1.0 - Math.Exp (pcol[1] / 255.0 * exposure));
-					pcol[2] = 255.0 * (1.0 - Math.Exp (pcol[2] / 255.0 * exposure));
-					
-					//gamma correction, may be wrong or unnecessary
-					pcol[0] = pcol[0] * Math.Pow (pcol[0] / 255.0, 1.0 / 2.2);
-					pcol[1] = pcol[1] * Math.Pow (pcol[1] / 255.0, 1.0 / 2.2);
-					pcol[2] = pcol[2] * Math.Pow (pcol[2] / 255.0, 1.0 / 2.2);
-					
-					pcol[0] = Math.Max (Math.Min (255, pcol[0]), 0);
-					pcol[1] = Math.Max (Math.Min (255, pcol[1]), 0);
-					pcol[2] = Math.Max (Math.Min (255, pcol[2]), 0);
-					
-					dimage[x,y,0] = pcol[0];
-					dimage[x,y,1] = pcol[1];
-					dimage[x,y,2] = pcol[2];
-					
-						}});
-					
-
-						
-#else
 					
 					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 0.5) {
 						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 0.5) {
@@ -261,7 +154,9 @@ namespace volkrenderer
 	
 				}
 			}
-#endif			
+#if THREADING
+			);
+#endif
 			#if CONSFLAGD
 			Console.WriteLine ("Rays shot: " + Convert.ToString (rays));
 			Console.WriteLine ("Rays that hit depth limit: " + Convert.ToString (killedrays));
@@ -330,14 +225,7 @@ namespace volkrenderer
 				Vector3d intersectp = origin + direction * ct;
 				
 				//Color pcol;
-				double[] pcol = new double[3] {0.0,0.0,0.0};
-			
-					/* TODO:
-					 * either fix this or get rid of it completely */
-			/*	if (cobject.isLight ()) 
-				{
-					return cobject.getColour(intersectp);
-				}*/			
+				double[] pcol = new double[3] {0.0,0.0,0.0};	
 				
 				foreach (Light li in scene.getLights ()) {
 					Vector3d Lp = li.getPoint ();
@@ -359,13 +247,16 @@ namespace volkrenderer
 						diff = li.getIntensity () * cobject.getDiffuse () * dot;
 						#endif
 							
-						//reflected ray off primitive
-						Vector3d R = (2.0 * dot * cobject.normal (intersectp)) - L;
+						
 						//specular multiplier
 						double spec = 0.0;
 							
 						#if SPECULAR
-						spec = li.getIntensity () * cobject.getSpecular () * Math.Pow (Vector3d.Dot (R, direction), 20);
+							if (cobject.getSpecular() > 0.0){
+								//reflected ray off primitive
+								Vector3d R = (2.0 * dot * cobject.normal (intersectp)) - L;
+								spec = li.getIntensity () * cobject.getSpecular () * Math.Pow (Vector3d.Dot (R, direction), 20);	
+							}							
 						#endif
 						
 							pcol[0] += (shade * 
@@ -448,8 +339,6 @@ namespace volkrenderer
 			
 			double shade = 1.0;
 			
-			/* TODO */
-			/*at some point (adding area lights) i'll have to change this so it accounts for all the points not just the center */
 			Vector3d L = li.getPoint () - p;
 			double lilength = L.Length;
 			L.Normalize ();

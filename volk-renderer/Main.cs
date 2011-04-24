@@ -99,8 +99,8 @@ namespace volkrenderer
 			vScene cbvs = new vScene (640, 480);
 			
 			
-			cbvs.origin = new Vector3d (0, 0, -800);
-			cbvs.target = new Vector3d (0, 0, 0);
+			cbvs.origin = new Vector3d (0, -5, -800);
+			cbvs.target = new Vector3d (0, -5, 0);
 			
 			Quad floor = new Quad (
 				new Vector3d (278, -278, 0.0), 
@@ -152,11 +152,11 @@ namespace volkrenderer
 			leftwall.setAmbient (0.0);
 			rightwall.setAmbient (0.0);
 			
-			floor.setDiffuse (1.0);
-			ceiling.setDiffuse (1.0);
-			backwall.setDiffuse (1.0);
-			leftwall.setDiffuse (1.0);
-			rightwall.setDiffuse (1.0);
+			floor.setDiffuse (0.8);
+			ceiling.setDiffuse (0.8);
+			backwall.setDiffuse (0.8);
+			leftwall.setDiffuse (0.8);
+			rightwall.setDiffuse (0.8);
 			
 			floor.setSpecular (0.0);
 			ceiling.setSpecular (0.0);

@@ -16,8 +16,8 @@ Features so far:
 * multiple depth reflections and refractions
 * textures
 * naive anti-aliasing
-* threading (slow and might be broken)
-* camera settings (fov and position only so far)
+* threading
+* camera settings
 * image information stored as floating point values for improved precision/manipulation
 
 Shapes:
@@ -55,7 +55,5 @@ A scene with lots of reflective surfaces.
 TODO
 ----------
 
-Add:
-
 * reduce the number of new() calls
-* figure out what the hell is wrong with threading
+* radiosity!

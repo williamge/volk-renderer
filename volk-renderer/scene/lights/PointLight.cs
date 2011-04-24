@@ -36,9 +36,9 @@ namespace volkrenderer
 			point = p;
 			
 			colour = new double[3];
-			colour[0] = col_.R;
-			colour[1] = col_.G;
-			colour[2] = col_.B;
+			colour[0] = (1.0 + intensity) * col_.R;
+			colour[1] = (1.0 + intensity) * col_.G;
+			colour[2] = (1.0 + intensity) * col_.B;
 			
 			intensity = intensity_;
 			radius = (int)(3.0 * (1.0 + intensity));
@@ -52,9 +52,9 @@ namespace volkrenderer
 			point = p;
 			
 			colour = new double[3];
-			colour[0] = col_.R;
-			colour[1] = col_.G;
-			colour[2] = col_.B;
+			colour[0] = (1.0 + intensity) * col_.R;
+			colour[1] = (1.0 + intensity) * col_.G;			
+			colour[2] = (1.0 + intensity) * col_.B;
 			
 			intensity = intensity_;
 			radius = 0;
