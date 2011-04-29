@@ -56,4 +56,5 @@ TODO
 ----------
 
 * reduce the number of new() calls
+* fix the utah teapot object
 * radiosity!

@@ -33,11 +33,13 @@ namespace volkrenderer
 			long Frequency, Ticks, TotalTime;
 			Stopwatch sw = new Stopwatch ();
 			Frequency = Stopwatch.Frequency;
-			sw.Start ();
 			
 			raytrace rt = new raytrace (vs);
 			
+			sw.Start ();
+			rt.RStart();			
 			sw.Stop ();
+			
 			Ticks = sw.ElapsedTicks;
 			TotalTime = 1000000L * Ticks / Frequency * 1/1000000;
 			Console.WriteLine ("Total time in seconds " + TotalTime);
@@ -52,9 +54,26 @@ namespace volkrenderer
 
 		}
 		
+		static vScene testScene ()
+		
+		{
+			vScene vs = new vScene (640, 480);
+			vs.setBack (Color.HotPink);
+			
+			vs.origin = new Vector3d (0, 0, -1);
+			vs.target = new Vector3d (0, 0, 0);
+			
+			Teapot tp = new Teapot ();
+			vs.addPrim (tp);
+			
+			
+			return vs;
+		}
+		
 		static vScene defaultScene ()
 		{
 			vScene vs = new vScene (640, 480);
+
 			
 			Sphere tsphere = new Sphere (Color.Blue, new Vector3d (0, -10, 100), 90);
 			
@@ -204,10 +223,12 @@ namespace volkrenderer
 		static vScene reflectionBox ()
 		
 		{
-			vScene cbvs = new vScene (640, 480);			
+			vScene cbvs = new vScene (640, 480);
+			cbvs.depth = 9;
+			cbvs.lightnums = 7.0;
 			
-			cbvs.origin = new Vector3d (0, -50, -500);
-			cbvs.target = new Vector3d (0, -50, 0);
+			cbvs.origin = new Vector3d (0, -5, -800);
+			cbvs.target = new Vector3d (0, -5, 0);
 			
 			Quad floor = new Quad (
 				new Vector3d (278, -278, 0.0), 

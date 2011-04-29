@@ -243,7 +243,7 @@ namespace volkrenderer
 
 		public double getAmbient ()
 		{
-			return 0.2;
+			return 1.0;
 		}
 		
 		public double getRefract ()

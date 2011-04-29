@@ -16,11 +16,14 @@ namespace volkrenderer
 		public double fov;
 		public double lightnums;
 		public int depth;
+		double[] bgcolor;
 		
 		public vScene (int width_, int height_)
 		{
 			ImageWidth = width_;
 			ImageHeight = height_;
+			
+			bgcolor = new double[3]{0.0,0.0,0.0};
 			
 			lightnums = 3.0;
 			depth = 4;
@@ -117,10 +120,37 @@ namespace volkrenderer
 			return lights;
 		}
 		
+		/// <summary>
+		/// Sets the background colour for the scene.
+		/// </summary>
+		/// <param name="col_">
+		/// Background colour for the scene to be set to <see cref="Color"/>
+		/// </param>
+		/// <returns>
+		/// true on success, false otherwise <see cref="System.Boolean"/>
+		/// </returns>
+		public bool setBack (Color col_)
+
+		{
+			bgcolor = new double[3] { col_.R, col_.G, col_.B };
+			return true;
+		}
+		
+		/// <summary>
+		/// Returns the background colour for a fired ray.
+		/// </summary>
+		/// <param name="origin">
+		/// Origin point of the ray <see cref="Vector3d"/>
+		/// </param>
+		/// <param name="direction">
+		/// Direction vector of the ray <see cref="Vector3d"/>
+		/// </param>
+		/// <returns>
+		/// Background colour for the ray as a double[3].
+		/// </returns>
 		public double[] getBack (Vector3d origin, Vector3d direction)
 		{
-			//return Color.Black;
-			return new double[] { 0.0, 0.0, 0.0 };
+			return bgcolor;
 		}
 		
 	}

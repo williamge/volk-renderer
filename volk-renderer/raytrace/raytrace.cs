@@ -21,9 +21,13 @@ namespace volkrenderer
 	{
 		Bitmap im;
 		
+		bool cameraSetFlag;
+		
 		int DEPTHLIMIT;
 		
 		Vector3d camx,camy,camz;
+		Vector3d origin__;
+		vScene scene;
 		
 		/* for performance reasons (to avoid the use of Bitmap.getPixel/setPixel) the image (and textures)
 		 * are stored in an array of doubles and during the image save (and texture load) the doubles are
@@ -36,21 +40,76 @@ namespace volkrenderer
 		Int64 shadowrays;
 		#endif
 		
-		public raytrace (vScene scene)
+		/// <summary>
+		/// Constructor for a Raytracer object to be constructed from a Vscene object.
+		/// </summary>
+		/// <param name="scene_">
+		/// The vScene object that will be raytraced. <see cref="vScene"/>
+		/// </param>
+		public raytrace (vScene scene_)
 		{
+			scene = scene_;
+			
 			im = new Bitmap (scene.ImageWidth, scene.ImageHeight);
-			dimage = new double[scene.ImageWidth,scene.ImageHeight,3];
+			dimage = null;
 			
 			DEPTHLIMIT = scene.depth;
 			
-			Vector3d origin = scene.origin;			
-			Vector3d target = scene.target;
+			cameraSetFlag = false;
+		}
+		
+		/// <summary>
+		/// Sets the camera and constructs the camera axis for the scene.
+		/// </summary>
+		/// <param name="origin_">
+		/// Origin point of the scene <see cref="Vector3d"/>
+		/// </param>
+		/// <param name="target_">
+		/// Targeted point <see cref="Vector3d"/>
+		/// </param>
+		/// <returns>
+		/// True on success, false otherwise.
+		/// </returns>
+		public bool setCamera (Vector3d origin_, Vector3d target_)
+		{
 			
+			if (origin_ == target_) {
+				return false;
+			}
+			
+			origin__ = origin_;
+			
+			camz = target_ - origin__;
+			camz.Normalize ();
+			
+			Vector3d up = new Vector3d (0, 1, 0);
+			
+			camx = Vector3d.Cross (up, camz);			
+			//if (up = scalar times camz) then we should choose a different up 
+			camx = camx != Vector3d.Zero ? camx : Vector3d.Cross (new Vector3d (0, 0, 1), camz);
+			
+			camy = Vector3d.Cross (camx, -camz);
+			
+			cameraSetFlag = true;
+			
+			return true;
+		}
+		
+		/// <summary>
+		/// Starts the raytracing for this raytracer object.
+		/// </summary>
+		public void RStart(){
+			
+			if (!cameraSetFlag){
+			
+				if (!setCamera(scene.origin,scene.target)){throw new ArgumentException();}
+			}
+			
+			dimage = new double[scene.ImageWidth, scene.ImageHeight, 3];
 			
 			/* Note: some values were interpreted from this page: http://www.unknownroad.com/rtfm/graphics/rt_eyerays.html
 			 * It is why there is a commented out pi/4
 			 * */
-		
 			
 			//Math.PI / 4.0;
 			//enter fov here(on right)
@@ -59,13 +118,6 @@ namespace volkrenderer
 			
 			fovx = Math.Tan (fovx);
 			fovy = Math.Tan (fovy);
-			
-			camz = target - origin;
-			camz.Normalize ();
-			Vector3d up = new Vector3d (0, 1, 0);
-			
-			camx =  Vector3d.Cross (up, camz);
-			camy =  Vector3d.Cross (camx, -camz);
 			
 			#if CONSFLAGD
 			Console.WriteLine (camz.ToString ());
@@ -80,17 +132,16 @@ namespace volkrenderer
 			#endif			
 			
 			double aacoef = 0.25;
-#if THREADING
-#else
-			double[] pcol_ = new double[3];
-			double[] pcol = new double[3];
-#endif
+
 			int iheight = im.Height;
 			int iwidth = im.Width;
 			
 			Vector3d camzz = camz * iwidth;
 			
-#if THREADING
+			//we make a new variable to try and stop any blocking from threads on accessing origin__
+			Vector3d origin = origin__;
+			
+#if THREADING			
 			Parallel.For(0,iwidth,delegate(int x)	{
 				for (int y = 0; y < iheight; y++) {
 					
@@ -104,6 +155,9 @@ namespace volkrenderer
 					pcol[1] = 0;
 					pcol[2] = 0;
 #else
+			double[] pcol_ = new double[3];
+			double[] pcol = new double[3];
+					
 			for (int x = 0; x < iwidth; x++) {
 				for (int y = 0; y < iheight; y++) {
 				
@@ -121,8 +175,7 @@ namespace volkrenderer
 					
 					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 0.5) {
 						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 0.5) {
-							Vector3d dirprime = ((fovx * camx * (offx - iwidth / 2)) + (fovy * camy * -(offy - iheight / 2)) + camzz) ;//- origin;
-							//Vector3d dirprime = new Vector3d (offx - im.Width / 2, -(offy - im.Height / 2), 0) - origin;
+							Vector3d dirprime = ((fovx * camx * (offx - iwidth / 2)) + (fovy * camy * -(offy - iheight / 2)) + camzz) ;
 							dirprime.Normalize ();
 											
 							pcol_ = trace (origin, dirprime, scene, 0);
@@ -130,23 +183,7 @@ namespace volkrenderer
 							pcol[1] += aacoef * pcol_[1];
 							pcol[2] += aacoef * pcol_[2];
 						}
-					}
-					
-					//exposures, may not be useful idk
-					double exposure = scene.exposure;
-					
-					pcol[0] = 255.0 * (1.0 - Math.Exp (pcol[0] / 255.0 * exposure));
-					pcol[1] = 255.0 * (1.0 - Math.Exp (pcol[1] / 255.0 * exposure));
-					pcol[2] = 255.0 * (1.0 - Math.Exp (pcol[2] / 255.0 * exposure));
-					
-					//gamma correction, may be wrong or unnecessary
-					pcol[0] = pcol[0] * Math.Pow (pcol[0] / 255.0, 1.0 / 2.2);
-					pcol[1] = pcol[1] * Math.Pow (pcol[1] / 255.0, 1.0 / 2.2);
-					pcol[2] = pcol[2] * Math.Pow (pcol[2] / 255.0, 1.0 / 2.2);
-					
-					pcol[0] = Math.Max (Math.Min (255, pcol[0]), 0);
-					pcol[1] = Math.Max (Math.Min (255, pcol[1]), 0);
-					pcol[2] = Math.Max (Math.Min (255, pcol[2]), 0);		
+					}	
 					
 					dimage[x,y,0] = pcol[0];
 					dimage[x,y,1] = pcol[1];
@@ -165,29 +202,25 @@ namespace volkrenderer
 
 		}
 		
-#if THREADING
-		private double[] threadtrace (object ti__)
-		{
-			threadinfo ti_ = (threadinfo)ti__;
-			return trace(ti_.origin_,ti_.direction_,ti_.scene_,0);
-		}
-		
-		private class threadinfo{
-			
-			public Vector3d origin_, direction_;
-			public vScene scene_;
-			
-			public threadinfo (Vector3d origin__, Vector3d direction__, vScene scene__)
-			{
-				origin_ = origin__;
-				direction_ = direction__;
-				scene_ = scene__;
-			}
-		}
-		
-#endif
-				
-		double[] trace (Vector3d origin, Vector3d direction, vScene scene, int rdepth)
+		/// <summary>
+		/// Traces a ray from origin to direction in scene.
+		/// </summary>
+		/// <param name="origin">
+		/// Origin of the ray <see cref="Vector3d"/>
+		/// </param>
+		/// <param name="direction">
+		/// Direction vector of the ray <see cref="Vector3d"/>
+		/// </param>
+		/// <param name="scene">
+		/// Scene for the ray to be fired in <see cref="vScene"/>
+		/// </param>
+		/// <param name="rdepth">
+		/// Current raytracing-recursion depth
+		/// </param>
+		/// <returns>
+		/// The colour for the ray stored in a double[3] object.
+		/// </returns>
+		private double[] trace (Vector3d origin, Vector3d direction, vScene scene, int rdepth)
 		{
 			
 			if (rdepth > DEPTHLIMIT) {
@@ -330,7 +363,24 @@ namespace volkrenderer
 			}
 		}
 		
-		
+		/// <summary>
+		/// Checks for the 'shadow factor' of the point p in scene.
+		/// </summary>
+		/// <param name="p">
+		/// Intersection point of the ray <see cref="Vector3d"/>
+		/// </param>
+		/// <param name="li">
+		/// The light to check for shadows from <see cref="Light"/>
+		/// </param>
+		/// <param name="scene">
+		///  <see cref="vScene"/>
+		/// </param>
+		/// <param name="cobject">
+		/// So the object doesn't cast shadows all over itself from floating point precision errors <see cref="Primitive"/>
+		/// </param>
+		/// <returns>
+		/// The 'shadow factor' of the point for light li.
+		/// </returns>
 		private double shadowCheck (Vector3d p, Light li, vScene scene, Primitive cobject)
 		{
 			#if CONSFLAGD
@@ -365,9 +415,52 @@ namespace volkrenderer
 			}
 			return shade;
 		}
+				
+		/// <summary>
+		/// Colour corrects the floating point image for the raytracer object, corrects for exposure, gamma and clamps the colour in [0,255]
+		/// </summary>
+		private void colourCorrection ()
+		{
 			
+			//exposures, may not be useful idk
+			double exposure = scene.exposure;
+			
+			for (int x = 0; x < im.Width; x++) {
+				for (int y = 0; y < im.Height; y++) {
+
+					dimage[x,y,0] = 255.0 * (1.0 - Math.Exp (dimage[x,y,0] / 255.0 * exposure));
+					dimage[x,y,1] = 255.0 * (1.0 - Math.Exp (dimage[x,y,1] / 255.0 * exposure));
+					dimage[x,y,2] = 255.0 * (1.0 - Math.Exp (dimage[x,y,2] / 255.0 * exposure));
+			
+					//gamma correction, may be wrong or unnecessary
+					dimage[x,y,0] = dimage[x,y,0] * Math.Pow (dimage[x,y,0] / 255.0, 1.0 / 2.2);
+					dimage[x,y,1] = dimage[x,y,1] * Math.Pow (dimage[x,y,1] / 255.0, 1.0 / 2.2);
+					dimage[x,y,2] = dimage[x,y,2] * Math.Pow (dimage[x,y,2] / 255.0, 1.0 / 2.2);
+			
+					dimage[x,y,0] = Math.Max (Math.Min (255, dimage[x,y,0]), 0);
+					dimage[x,y,1] = Math.Max (Math.Min (255, dimage[x,y,1]), 0);
+					dimage[x,y,2] = Math.Max (Math.Min (255, dimage[x,y,2]), 0);
+				}
+			}
+		}
+				
+		/// <summary>
+		/// Saves the image stored in the double array to a jpeg file. Requires the raytrace to have been completed.
+		/// </summary>
+		/// <param name="path">
+		/// Path for the file to be saved.
+		/// </param>
+		/// <returns>
+		/// True on success, false otherwise.
+		/// </returns>	
 		public bool imageSave (string path)
 		{
+			if (dimage == null) {
+				return false;
+			}
+			
+			colourCorrection ();
+					
 			for (int i = 0; i < im.Width; i++)
 			{
 				for (int j = 0; j < im.Height; j++) 
@@ -387,9 +480,6 @@ namespace volkrenderer
 			/* HACK */
 			//im.Save ("/Users/william/Dropbox/Public/test.jpg");
 			
-			
-			/* TODO
-			 * give it a reason to return something other than true */
 			return true;
 		}
 		
