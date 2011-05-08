@@ -45,20 +45,8 @@ namespace volkrenderer
 			scene.addPrim (this);
 		}
 		
-		public PointLight (Vector3d p, Color col_, double intensity_, vScene scene,bool isthisusedforarealights)
-		{
-			points = new List<Vector3d> ();
-			points.Add (p);
-			point = p;
-			
-			colour = new double[3];
-			colour[0] = (1.0 + intensity) * col_.R;
-			colour[1] = (1.0 + intensity) * col_.G;			
-			colour[2] = (1.0 + intensity) * col_.B;
-			
-			intensity = intensity_;
+		public void setAreaLight(){
 			radius = 0;
-			scene.addPrim (this);
 		}
 		
 		public List<Vector3d> getPoints ()
@@ -147,6 +135,13 @@ namespace volkrenderer
 		public bool isLight ()
 		{
 			return true;
+		}
+		
+		public RPatch[] RSplit (int gridSize)
+		{
+			//pointlights aren't supported in radiosity
+			RPatch[] rp = new RQuad[0];
+			return rp;
 		}
 		#endregion
 }

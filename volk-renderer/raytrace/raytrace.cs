@@ -131,7 +131,7 @@ namespace volkrenderer
 			shadowrays = 0;
 			#endif			
 			
-			double aacoef = 0.25;
+			const double aacoef = 1.0;//0.25;
 
 			int iheight = im.Height;
 			int iwidth = im.Width;
@@ -173,8 +173,8 @@ namespace volkrenderer
 					
 
 					
-					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 0.5) {
-						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 0.5) {
+					for (double offx = (double)x; offx <= (double)x + 0.5; offx += 10.5) {
+						for (double offy = (double)y; offy <= (double)y + 0.5; offy += 10.5) {
 							Vector3d dirprime = ((fovx * camx * (offx - iwidth / 2)) + (fovy * camy * -(offy - iheight / 2)) + camzz) ;
 							dirprime.Normalize ();
 											
@@ -256,6 +256,8 @@ namespace volkrenderer
 			
 			if (ct > 0.0) {
 				Vector3d intersectp = origin + direction * ct;
+						
+				Vector3d cobjnormal = cobject.normal(intersectp);
 				
 				//Color pcol;
 				double[] pcol = new double[3] {0.0,0.0,0.0};	
@@ -266,12 +268,12 @@ namespace volkrenderer
 					Vector3d L = Lp - intersectp;
 					L.Normalize ();
 						
-					double dot = Vector3d.Dot (L, cobject.normal (intersectp));
-					if (dot > 0) {
+					double dot = Vector3d.Dot (L, cobjnormal);
+					if (dot > 0.0) {
 						
 						double shade = 1.0;
 						#if SHADOWS
-						shade = shadowCheck (intersectp, li, scene, cobject);
+						shade = shadowCheck (intersectp + 0.000001 * cobjnormal, li, scene, cobject);
 						#endif
 						
 						//diffuse multiplier
@@ -287,7 +289,7 @@ namespace volkrenderer
 						#if SPECULAR
 							if (cobject.getSpecular() > 0.0){
 								//reflected ray off primitive
-								Vector3d R = (2.0 * dot * cobject.normal (intersectp)) - L;
+								Vector3d R = (2.0 * dot * cobjnormal) - L;
 								spec = li.getIntensity () * cobject.getSpecular () * Math.Pow (Vector3d.Dot (R, direction), 20);	
 							}							
 						#endif
@@ -318,7 +320,8 @@ namespace volkrenderer
 				pcol[1] += (ambient * cobject.getColour (intersectp)[1]);
 				pcol[2] += (ambient * cobject.getColour (intersectp)[2]);
 				
-				Vector3d N = cobject.normal (intersectp);
+				/* TODO: get rid of N since it does the same thing as cobjnormal */
+				Vector3d N = cobjnormal;
 				#if REFLECTION
 				//reflection
 				if (cobject.getReflect () > 0) {
@@ -357,8 +360,7 @@ namespace volkrenderer
 
 			
 			} else {
-				/* TODO */
-				/* add environment mapping */
+				/* TODO: add environment mapping */
 				return scene.getBack(origin,direction);
 			}
 		}
@@ -395,7 +397,7 @@ namespace volkrenderer
 			
 			foreach (Primitive spr in scene.getPrims ())
 			{
-				if (!spr.isLight() && spr != cobject && spr != li)
+				if (!spr.isLight())
 				{
 					double objintersect = spr.intersect (p, L);
 					if (objintersect > 0.0 && objintersect <= lilength) 

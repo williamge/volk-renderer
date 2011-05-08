@@ -1,9 +1,12 @@
 using System;
 using System.IO;
 using System.Drawing;
+#if WINDOWS
+#else
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
+#endif
 using OpenTK;
 using System.Diagnostics;
 
@@ -28,7 +31,7 @@ namespace volkrenderer
 			
 			THEGODDAMNRELATIVEPATH = System.IO.Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location);
 			
-			vScene vs = MainClass.CornellBox ();
+			vScene vs = MainClass.radiosityRoom ();
 			
 			long Frequency, Ticks, TotalTime;
 			Stopwatch sw = new Stopwatch ();
@@ -305,7 +308,7 @@ namespace volkrenderer
 			bluesphere.setDiffuse (1.0);
 			bluesphere.setSpecular (1.0);
 			cbvs.addPrim (bluesphere);*/
-			
+		
 			Sphere bluesphere2 = new Sphere (Color.Black, new Vector3d (120, -178, 400), 100);
 			bluesphere2.setRefract (1.3);
 			bluesphere2.setTransparency (0.7);
@@ -316,18 +319,298 @@ namespace volkrenderer
 			
 			//cbvs.addSphere (new Vector3d (-140, -178, 275), 100, Color.Blue);			
 			
-			Sphere reflectsphere = new Sphere ( Color.Black,new Vector3d (-91, -178, 300), 100, 1.0);
+			Sphere reflectsphere = new Sphere (Color.Black, new Vector3d (-91, -178, 300), 100, 1.0);
 			reflectsphere.setSpecular (0.7);
 			reflectsphere.setAmbient (0.0);
 			cbvs.addPrim (reflectsphere);
 			
 			cbvs.addPrim (floor);
 			cbvs.addPrim (ceiling);
-			cbvs.addPrim(backwall);
-			cbvs.addPrim(leftwall);
-			cbvs.addPrim(rightwall);			
+			cbvs.addPrim (backwall);
+			cbvs.addPrim (leftwall);
+			cbvs.addPrim (rightwall);
 			
 			return cbvs;
+		}
+		
+		static vScene radiosityRoom ()
+		{
+			vScene rrvs = new vScene (640, 480);
+			
+			/*rrvs.origin = new Vector3d (300, 125, -500);
+			rrvs.target = new Vector3d (100, 125, 0);*/
+			
+			rrvs.origin = new Vector3d (280, 125, -100);
+			rrvs.target = new Vector3d (10, 125, 300);
+			
+			/*rrvs.origin = new Vector3d (-85, 125, 155);
+			rrvs.target = new Vector3d (-85, 125, 200);*/
+			
+			rrvs.fov = 0.01;
+			
+			rrvs.lightnums = 7;
+			
+			#region Basic room
+			
+			Quad floor = new Quad (new Vector3d (300, 0, -100),
+									new Vector3d (-250, 0, -100),
+									new Vector3d (-250, 0, 300),
+									new Vector3d (300, 0, 300), Color.Red);
+			
+			Quad ceiling = new Quad (new Vector3d (-250, 250, -100),
+									new Vector3d (300, 250, -100),
+									new Vector3d (300, 250, 300),
+									new Vector3d (-250, 250, 300), Color.White);
+			
+			Quad leftwall = new Quad (new Vector3d (-250, 250, -100),
+										new Vector3d (-250, 250, 300),
+										new Vector3d (-250, 0, 300),
+										new Vector3d (-250, 0, -100), Color.White);
+			
+			Quad rightwall = new Quad (new Vector3d (300, 250, 300),
+										new Vector3d (300, 250, -100),
+										new Vector3d (300, 0, -100),
+										new Vector3d (300, 0, 300), Color.White);
+			
+			Quad frontwall = new Quad (new Vector3d (300, 250, -100),
+									new Vector3d (-250, 250, -100),
+									new Vector3d (-250, 0, -100),
+									new Vector3d (300, 0, -100), Color.White);
+			
+			#endregion
+			
+			#region Left post
+			
+			
+			Quad p1leftwall = new Quad (new Vector3d (-100, 250, 155),
+										new Vector3d (-100, 250, 125),
+										new Vector3d (-100, 0, 125),
+										new Vector3d (-100, 0, 155), Color.White);
+			
+			Quad p1rightwall = new Quad (new Vector3d (-70, 250, 125),
+										new Vector3d (-70, 250, 155),
+										new Vector3d (-70, 0, 155),
+										new Vector3d (-70, 0, 125), Color.White);
+			
+			Quad p1backwall = new Quad (new Vector3d (-100, 250, 125),
+										new Vector3d (-70, 250, 125),
+										new Vector3d (-70, 0, 125),
+										new Vector3d (-100, 0, 125), Color.White);
+			
+			Quad p1frontwall = new Quad (new Vector3d (-70, 250, 155),
+										new Vector3d (-100, 250, 155),
+										new Vector3d (-100, 0, 155),
+										new Vector3d (-70, 0, 155), Color.White);
+			
+			#endregion
+			
+			#region Right post
+			
+			
+			Quad p2leftwall = new Quad (new Vector3d (100, 250, 155),
+										new Vector3d (100, 250, 125),
+										new Vector3d (100, 0, 125),
+										new Vector3d (100, 0, 155), Color.White);
+			
+			Quad p2rightwall = new Quad (new Vector3d (130, 250, 125),
+										new Vector3d (130, 250, 155),
+										new Vector3d (130, 0, 155),
+										new Vector3d (130, 0, 125), Color.White);
+			
+			Quad p2backwall = new Quad (new Vector3d (100, 250, 125),
+										new Vector3d (130, 250, 125),
+										new Vector3d (130, 0, 125),
+										new Vector3d (100, 0, 125), Color.White);
+			
+			Quad p2frontwall = new Quad (new Vector3d (130, 250, 155),
+										new Vector3d (100, 250, 155),
+										new Vector3d (100, 0, 155),
+										new Vector3d (130, 0, 155), Color.White);
+			
+			#endregion
+			
+			#region Back wall
+			
+			Quad b1wall = new Quad (new Vector3d (-250, 250, 300),
+									new Vector3d (-170, 250, 300),
+									new Vector3d (-170, 0, 300),
+									new Vector3d (-250, 0, 300), Color.White);
+			
+			Quad b2wall = new Quad (new Vector3d (-90, 250, 300),
+									new Vector3d (110, 250, 300),
+									new Vector3d (110, 0, 300),
+									new Vector3d (-90, 0, 300), Color.White);
+			
+			Quad b3wall = new Quad (new Vector3d (190, 250, 300),
+									new Vector3d (300, 250, 300),
+									new Vector3d (300, 0, 300),
+									new Vector3d (190, 0, 300), Color.White);
+			
+			#region Left window
+			
+			Quad b12leftwall = new Quad (new Vector3d (-170, 250, 300),
+										new Vector3d (-170, 250, 315),
+										new Vector3d (-170, 0, 315),
+										new Vector3d (-170, 0, 300), Color.White);
+			
+			Quad b12rightwall = new Quad (new Vector3d (-90, 0, 300),
+											new Vector3d (-90, 0, 315),
+											new Vector3d (-90, 250, 315),
+											new Vector3d (-90, 250, 300), Color.White);
+			
+			Quad b12floor = new Quad (new Vector3d (-90, 0, 300),
+										new Vector3d (-170, 0, 300),
+										new Vector3d (-170, 0, 315),
+										new Vector3d (-90, 0, 315), Color.Red);
+			
+			Quad b12ceiling = new Quad (new Vector3d (-90, 250, 300),
+										new Vector3d (-90, 250, 315),
+										new Vector3d (-170, 250, 315),
+										new Vector3d (-170, 250, 300), Color.White);
+			
+			Quad b12lowerback = new Quad (new Vector3d(-170,60,315),
+											new Vector3d(-90,60,315),
+											new Vector3d(-90,0,315),
+											new Vector3d(-170,0,315), Color.White);
+			
+			Quad b12upperback = new Quad (new Vector3d(-170,250,315),
+											new Vector3d(-90,250,315),
+											new Vector3d(-90,220,315),
+											new Vector3d(-170,220,315), Color.White);
+			
+			#endregion
+			
+			#region Right window
+			
+			Quad b23leftwall = new Quad (new Vector3d (110, 250, 300),
+										new Vector3d (110, 250, 315),
+										new Vector3d (110, 0, 315),
+										new Vector3d (110, 0, 300), Color.White);
+			
+			Quad b23rightwall = new Quad (new Vector3d (190, 0, 300),
+											new Vector3d (190, 0, 315),
+											new Vector3d (190, 250, 315),
+											new Vector3d (190, 250, 300), Color.White);
+			
+			Quad b23floor = new Quad (new Vector3d (190, 0, 300),
+										new Vector3d (110, 0, 300),
+										new Vector3d (110, 0, 315),
+										new Vector3d (190, 0, 315), Color.Red);
+			
+			Quad b23ceiling = new Quad (new Vector3d (190, 250, 300),
+										new Vector3d (190, 250, 315),
+										new Vector3d (110, 250, 315),
+										new Vector3d (110, 250, 300), Color.White);
+			
+			Quad b23lowerback = new Quad (new Vector3d(110,60,315),
+											new Vector3d(190,60,315),
+											new Vector3d(190,0,315),
+											new Vector3d(110,0,315), Color.White);
+			
+			Quad b23upperback = new Quad (new Vector3d(110,250,315),
+											new Vector3d(190,250,315),
+											new Vector3d(190,220,315),
+											new Vector3d(110,220,315), Color.White);
+			
+			#endregion
+				
+			#endregion
+			
+			/*
+			floor.setAmbient (0.0);
+			ceiling.setAmbient (0.0);
+			leftwall.setAmbient (0.0);
+			rightwall.setAmbient (0.0);
+			frontwall.setAmbient (0.0);
+			
+			p1leftwall.setAmbient (0.0);
+			p1rightwall.setAmbient (0.0);
+			p1backwall.setAmbient (0.0);
+			p1frontwall.setAmbient (0.0);
+			
+			p2leftwall.setAmbient (0.0);
+			p2rightwall.setAmbient (0.0);
+			p2backwall.setAmbient (0.0);
+			p2frontwall.setAmbient (0.0);
+			
+			b1wall.setAmbient (0.0);
+			b2wall.setAmbient (0.0);
+			b3wall.setAmbient (0.0);
+			*/
+		
+			floor.setSpecular (0.0);
+			ceiling.setSpecular (0.0);
+			leftwall.setSpecular (0.0);
+			rightwall.setSpecular (0.0);
+			frontwall.setSpecular (0.0);
+			
+			p1leftwall.setSpecular (0.0);
+			p1rightwall.setSpecular (0.0);
+			p1backwall.setSpecular (0.0);
+			p1frontwall.setSpecular (0.0);
+			
+			p2leftwall.setSpecular (0.0);
+			p2rightwall.setSpecular (0.0);
+			p2backwall.setSpecular (0.0);
+			p2frontwall.setSpecular (0.0);
+			
+			b1wall.setSpecular (0.0);
+			b2wall.setSpecular (0.0);
+			b3wall.setSpecular (0.0);
+			
+			b12leftwall.setSpecular (0.0);
+			b12rightwall.setSpecular (0.0);
+		
+			rrvs.addPrim (floor);
+			rrvs.addPrim (ceiling);
+			rrvs.addPrim (leftwall);
+			rrvs.addPrim (rightwall);
+			rrvs.addPrim (frontwall);
+			
+			rrvs.addPrim (p1leftwall);
+			rrvs.addPrim (p1rightwall);
+			rrvs.addPrim (p1backwall);
+			rrvs.addPrim (p1frontwall);
+		
+			rrvs.addPrim (p2leftwall);
+			rrvs.addPrim (p2rightwall);
+			rrvs.addPrim (p2backwall);
+			rrvs.addPrim (p2frontwall);
+			
+			rrvs.addPrim (b1wall);
+			rrvs.addPrim (b2wall);
+			rrvs.addPrim (b3wall);
+			
+			rrvs.addPrim (b12leftwall);
+			rrvs.addPrim (b12rightwall);
+			rrvs.addPrim (b12floor);
+			rrvs.addPrim (b12ceiling);
+			rrvs.addPrim(b12lowerback);
+			rrvs.addPrim(b12upperback);
+			
+			rrvs.addPrim (b23leftwall);
+			rrvs.addPrim (b23rightwall);
+			rrvs.addPrim (b23floor);
+			rrvs.addPrim (b23ceiling);
+			rrvs.addPrim(b23lowerback);
+			rrvs.addPrim(b23upperback);
+			
+			//rrvs.addPointLight (new Vector3d (-130, 125, 350), Color.White,0.5);
+			//rrvs.addPointLight (new Vector3d (150, 125, 350), Color.White,0.5);
+			
+			rrvs.addAreaLight(new Vector3d(-170,220,380),
+								new Vector3d(-90,220,380),
+								new Vector3d(-90,60,380),
+								new Vector3d(-170,60,380), Color.White,1.0);
+			
+			rrvs.addAreaLight(new Vector3d(110,220,380),
+								new Vector3d(190,220,380),
+								new Vector3d(190,60,380),
+								new Vector3d(110,60,380), Color.White,1.0);
+
+			
+			return rrvs;
+			
 		}
 	}
 }

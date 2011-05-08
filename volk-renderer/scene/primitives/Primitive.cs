@@ -19,6 +19,8 @@ namespace volkrenderer
 		double getRefract();
 		
 		bool isLight();
+		
+		RPatch[] RSplit(int gridSize);
 	}
 }
 

@@ -1,28 +1,30 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Console" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="volk-renderer/Main.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="volk-renderer/radiosity/radiosity.cs">
     <Files>
-      <File FileName="volk-renderer/raytrace/raytrace.cs" Line="387" Column="11" />
-      <File FileName="volk-renderer/scene/scene.cs" Line="116" Column="3" />
-      <File FileName="volk-renderer/scene/primitives/Primitive.cs" Line="19" Column="23" />
-      <File FileName="volk-renderer/scene/primitives/Sphere.cs" Line="108" Column="11" />
-      <File FileName="volk-renderer/scene/lights/PointLight.cs" Line="41" Column="43" />
-      <File FileName="volk-renderer/scene/lights/Light.cs" Line="10" Column="10" />
-      <File FileName="volk-renderer/Main.cs" Line="228" Column="4" />
-      <File FileName="volk-renderer/scene/primitives/Triangle.cs" Line="204" Column="1" />
-      <File FileName="volk-renderer/scene/primitives/Quad.cs" Line="218" Column="3" />
-      <File FileName="volk-renderer/scene/primitives/Teapot.cs" Line="246" Column="14" />
+      <File FileName="volk-renderer/radiosity/radiosity.cs" Line="208" Column="40" />
+      <File FileName="volk-renderer/raytrace/raytrace.cs" Line="455" Column="1" />
+      <File FileName="volk-renderer/scene/primitives/Primitive.cs" Line="23" Column="31" />
+      <File FileName="volk-renderer/scene/scene.cs" Line="90" Column="37" />
+      <File FileName="volk-renderer/scene/primitives/Quad.cs" Line="60" Column="18" />
+      <File FileName="volk-renderer/radiosity/RPatch.cs" Line="8" Column="32" />
+      <File FileName="volk-renderer/radiosity/RQuad.cs" Line="56" Column="10" />
+      <File FileName="volk-renderer/scene/lights/PointLight.cs" Line="46" Column="4" />
+      <File FileName="volk-renderer/scene/primitives/Sphere.cs" Line="108" Column="13" />
+      <File FileName="volk-renderer/Main.cs" Line="565" Column="4" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="volk-renderer" expanded="True">
+            <Node name="radiosity" expanded="True">
+              <Node name="radiosity.cs" selected="True" />
+            </Node>
             <Node name="raytrace" expanded="True" />
             <Node name="scene" expanded="True">
               <Node name="lights" expanded="True" />
               <Node name="primitives" expanded="True" />
             </Node>
-            <Node name="Main.cs" selected="True" />
             <Node name="MainWindow.xib" expanded="True" />
           </Node>
         </State>

@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>/Users/william/Dropbox/repos/volk-rend-csharp/volk-renderer/volk-renderer/bin/ConsoleBuild/volk-renderer</name>
+    </assembly>
+    <members>
+        <member name="M:volkrenderer.raytrace.#ctor(volkrenderer.vScene)">
+            <summary>
+            Constructor for a Raytracer object to be constructed from a Vscene object.
+            </summary>
+            <param name="scene_">
+            The vScene object that will be raytraced. <see cref="T:volkrenderer.vScene" /></param>
+        </member>
+        <member name="M:volkrenderer.raytrace.setCamera(OpenTK.Vector3d,OpenTK.Vector3d)">
+            <summary>
+            Sets the camera and constructs the camera axis for the scene.
+            </summary>
+            <param name="origin_">
+            Origin point of the scene <see cref="T:OpenTK.Vector3d" /></param>
+            <param name="target_">
+            Targeted point <see cref="T:OpenTK.Vector3d" /></param>
+            <returns>
+            True on success, false otherwise.
+            </returns>
+        </member>
+        <member name="M:volkrenderer.raytrace.RStart">
+            <summary>
+            Starts the raytracing for this raytracer object.
+            </summary>
+        </member>
+        <member name="M:volkrenderer.raytrace.trace(OpenTK.Vector3d,OpenTK.Vector3d,volkrenderer.vScene,System.Int32)">
+            <summary>
+            Traces a ray from origin to direction in scene.
+            </summary>
+            <param name="origin">
+            Origin of the ray <see cref="T:OpenTK.Vector3d" /></param>
+            <param name="direction">
+            Direction vector of the ray <see cref="T:OpenTK.Vector3d" /></param>
+            <param name="scene">
+            Scene for the ray to be fired in <see cref="T:volkrenderer.vScene" /></param>
+            <param name="rdepth">
+            Current raytracing-recursion depth
+            </param>
+            <returns>
+            The colour for the ray stored in a double[3] object.
+            </returns>
+        </member>
+        <member name="M:volkrenderer.raytrace.shadowCheck(OpenTK.Vector3d,volkrenderer.Light,volkrenderer.vScene,volkrenderer.Primitive)">
+            <summary>
+            Checks for the 'shadow factor' of the point p in scene.
+            </summary>
+            <param name="p">
+            Intersection point of the ray <see cref="T:OpenTK.Vector3d" /></param>
+            <param name="li">
+            The light to check for shadows from <see cref="T:volkrenderer.Light" /></param>
+            <param name="scene">
+                <see cref="T:volkrenderer.vScene" />
+            </param>
+            <param name="cobject">
+            So the object doesn't cast shadows all over itself from floating point precision errors <see cref="T:volkrenderer.Primitive" /></param>
+            <returns>
+            The 'shadow factor' of the point for light li.
+            </returns>
+        </member>
+        <member name="M:volkrenderer.raytrace.colourCorrection">
+            <summary>
+            Colour corrects the floating point image for the raytracer object, corrects for exposure, gamma and clamps the colour in [0,255]
+            </summary>
+        </member>
+        <member name="M:volkrenderer.raytrace.imageSave(System.String)">
+            <summary>
+            Saves the image stored in the double array to a jpeg file. Requires the raytrace to have been completed.
+            </summary>
+            <param name="path">
+            Path for the file to be saved.
+            </param>
+            <returns>
+            True on success, false otherwise.
+            </returns>
+        </member>
+        <member name="M:volkrenderer.vScene.setBack(System.Drawing.Color)">
+            <summary>
+            Sets the background colour for the scene.
+            </summary>
+            <param name="col_">
+            Background colour for the scene to be set to <see cref="T:System.Drawing.Color" /></param>
+            <returns>
+            true on success, false otherwise <see cref="T:System.Boolean" /></returns>
+        </member>
+        <member name="M:volkrenderer.vScene.getBack(OpenTK.Vector3d,OpenTK.Vector3d)">
+            <summary>
+            Returns the background colour for a fired ray.
+            </summary>
+            <param name="origin">
+            Origin point of the ray <see cref="T:OpenTK.Vector3d" /></param>
+            <param name="direction">
+            Direction vector of the ray <see cref="T:OpenTK.Vector3d" /></param>
+            <returns>
+            Background colour for the ray as a double[3].
+            </returns>
+        </member>
+    </members>
+</doc>

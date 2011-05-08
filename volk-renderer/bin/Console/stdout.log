@@ -1,7 +1,7 @@
-(0, 0, 1)
-(1, 0, 0)
+(-0.559472855001062, 0, 0.828848674075648)
+(0.828848674075648, 0, 0.559472855001062)
 (0, 1, 0)
-Rays shot: 1343960
+Rays shot: 307200
 Rays that hit depth limit: 0
-Shadow rays shot: 16857764
-Total time in seconds 70
+Shadow rays shot: 23230062
+Total time in seconds 372

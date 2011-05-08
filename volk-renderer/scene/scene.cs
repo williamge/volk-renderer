@@ -91,20 +91,23 @@ namespace volkrenderer
 			Random monteoffset = new Random();
 			
 			for (int i = 0;i<=lightnum;i++){
-				for (int j = 0;j<=lightnum;j++){
-					/* TODO
-					 * change or fix or do something so this works on more than just the xz-axis plane */
-					lights.Add(new PointLight(p1_ + new Vector3d(((p2_.X-p1_.X)/lightnum * monteoffset.NextDouble() ) + i * (p2_.X-p1_.X)/lightnum,
-													0,
-													((p4_.Z-p1_.Z)/lightnum * monteoffset.NextDouble() ) + j * (p4_.Z-p1_.Z)/lightnum),
-							col_, t_ / Math.Pow(lightnum + 1, 2), this,true));
+				for (int j = 0;j<=lightnum;j++){						
+					PointLight pl = new PointLight(p1_ 
+							//u_vector offset
+							+ ((p2_ - p1_) * ((i * 1.0/lightnum) + 1.0/lightnum * monteoffset.NextDouble()))
+							//v_vector offset
+							+ ((p4_ - p1_)* ((j * 1.0/lightnum) + 1.0/lightnum * monteoffset.NextDouble()))
+							, col_, t_/Math.Pow(lightnum+1,2),this);
+					pl.setAreaLight();
+					lights.Add(pl);
+					
 				}
 			}
 			Quad aq = new Quad(p1_,p2_,p3_,p4_,col_);
 			aq.setAmbient(1.0);
 			aq.setDiffuse(0.0);
 			aq.setSpecular(0.0);
-			aq.setLight();
+			aq.setLight(t_);
 			prims.Add(aq);
 			return true;
 		}

@@ -105,8 +105,7 @@ namespace volkrenderer
 		public double[] getColour (Vector3d p)
 		{
 			
-			/* TODO */
-			/* some kind of interpolation to clean up textures */
+			/* TODO: some kind of interpolation to clean up textures */
 			if (texture != null) 
 			{
 				Vector3d vp = (p - center) * 1.0/radius;
@@ -243,6 +242,11 @@ namespace volkrenderer
 			
 			//texture = text_;
 			return true;
+		}
+		
+		public RPatch[] RSplit (int gridSize)
+		{
+			throw new NotImplementedException ();
 		}
 	}
 }

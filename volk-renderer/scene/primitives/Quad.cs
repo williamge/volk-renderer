@@ -19,6 +19,8 @@ namespace volkrenderer
 		double diffuse;
 		double specular;
 		double transparency;
+		
+		double intensity;
 
 		double[,,] texture;
 		int tWidth, tHeight;
@@ -55,13 +57,14 @@ namespace volkrenderer
 			
 			
 			
-			ambient = 0.3;
-			diffuse = 1.0;
+			ambient = 0.15;
+			diffuse = 0.6;
 			specular = 0.5;
 			reflectd = 0.0;
 			transparency = 0.0;
 			
 			islight = false;
+			intensity = 0.0;
 			
 			texture = null;
 			
@@ -173,9 +176,10 @@ namespace volkrenderer
 			return true;
 		}
 		
-		public void setLight ()
+		public void setLight (double i_)
 		{
 			islight = true;
+			intensity = i_;
 		}
 		
 		//get
@@ -223,6 +227,40 @@ namespace volkrenderer
 		public bool isLight ()
 		{
 			return islight;
+		}
+		
+		public RPatch[] RSplit (int gridSize)
+		{
+			int xgrids = (int)Math.Ceiling(ubasis.Length/gridSize);
+			int ygrids = (int)Math.Ceiling(vbasis.Length/gridSize);
+			
+			RPatch[] rp = new RQuad[xgrids*ygrids];
+			
+			/*
+			 * p1 + ubasis * (x * 1.0/xgrids) + vbasis * (y * 1.0/ygrids)
+			 * ->
+			 * p1 + ubasis * ((x+1) * 1.0/xgrids) + vbasis * ((y+1)* 1.0/ygrids)
+			 * 
+			 */
+			
+			int n=0;
+			for (int x=0;x<xgrids;x++){
+				for (int y=0;y<ygrids;y++){
+					rp[n] = new RQuad(
+						p1 + ubasis * (x * 1.0/xgrids) + vbasis * (y * 1.0/ygrids),
+						p1 + ubasis * ((x+1) * 1.0/xgrids) + vbasis * (y * 1.0/ygrids),
+						p1 + ubasis * ((x+1) * 1.0/xgrids) + vbasis * ((y+1) * 1.0/ygrids), 
+						p1 + ubasis * (x * 1.0/xgrids) + vbasis * ((y+1) * 1.0/ygrids),
+						colour,
+						diffuse);
+					if (islight){
+						rp[n].setEmission(intensity);
+					}
+					n++;
+				}
+			}
+			
+			return rp;
 		}
 		#endregion
 	}

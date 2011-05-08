@@ -45,6 +45,7 @@
     <OutputPath>bin\ConsoleBuild</OutputPath>
     <DefineConstants>CONSFLAG</DefineConstants>
     <WarningLevel>4</WarningLevel>
+    <GenerateDocumentation>true</GenerateDocumentation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'WindowsR|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -91,10 +92,13 @@
     <Compile Include="scene\primitives\Plane.cs" />
     <Compile Include="scene\lights\PointLight.cs" />
     <Compile Include="scene\lights\Light.cs" />
-    <Compile Include="scene\primitives\LightSphere.cs" />
     <Compile Include="scene\primitives\Triangle.cs" />
     <Compile Include="scene\primitives\Quad.cs" />
     <Compile Include="scene\primitives\Teapot.cs" />
+    <Compile Include="radiosity\RPatch.cs" />
+    <Compile Include="radiosity\RQuad.cs" />
+    <Compile Include="radiosity\RTriangle.cs" />
+    <Compile Include="radiosity\radiosity.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainWindow.xib" />
@@ -109,6 +113,7 @@
     <Folder Include="raytrace\" />
     <Folder Include="scene\primitives\" />
     <Folder Include="scene\lights\" />
+    <Folder Include="radiosity\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dog.jpg" />

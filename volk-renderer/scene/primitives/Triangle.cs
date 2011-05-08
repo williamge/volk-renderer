@@ -211,6 +211,11 @@ namespace volkrenderer
 		{
 			return false;
 		}
+		
+		public RPatch[] RSplit (int gridSize)
+		{
+			throw new NotImplementedException ();
+		}
 		#endregion
 
 }

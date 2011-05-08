@@ -242,9 +242,9 @@ namespace volkrenderer
 					texture[i, j, 0] = (double)tcol.R;
 					texture[i, j, 1] = (double)tcol.G;
 					texture[i, j, 2] = (double)tcol.B;
-					
-				}
 				
+				}
+			
 			}
 			
 			tWidth = text_.Width;
@@ -252,7 +252,12 @@ namespace volkrenderer
 			
 			//texture = im_;
 			return true;
-			
+		
+		}
+		
+		public RPatch[] RSplit (int gridSize)
+		{
+			throw new NotImplementedException ();
 		}
 	}
 }
