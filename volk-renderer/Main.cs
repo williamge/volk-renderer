@@ -23,13 +23,13 @@ namespace volkrenderer
 		 * doesn't work that well when I program this for the mac since the relative
 		 * path of the executing assembly is in the app, so I would have to go
 		 * up by two or so directories to save it outside the app, great. */
-		public static string THEGODDAMNRELATIVEPATH;
+		public static string relativepath;
 		
 		
 		static void Main (string[] args)
 		{
 			
-			THEGODDAMNRELATIVEPATH = System.IO.Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location);
+			relativepath = System.IO.Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location);
 			
 			vScene vs = MainClass.radiosityRoom ();
 			
@@ -47,7 +47,7 @@ namespace volkrenderer
 			TotalTime = 1000000L * Ticks / Frequency * 1/1000000;
 			Console.WriteLine ("Total time in seconds " + TotalTime);
 #if WINDOWS
-			rt.imageSave( THEGODDAMNRELATIVEPATH + @"\render.jpg");
+			rt.imageSave( relativepath + @"\render.jpg");
 #else
 			rt.imageSave ("/Users/william/Dropbox/repos/volk-rend-csharp/volk-renderer/volk-renderer/bin/test.jpg");
 #endif
@@ -81,15 +81,15 @@ namespace volkrenderer
 			Sphere tsphere = new Sphere (Color.Blue, new Vector3d (0, -10, 100), 90);
 			
 			#if WINDOWS
-			Bitmap checker = new Bitmap (THEGODDAMNRELATIVEPATH + @"\checker.jpg");
+			Bitmap checker = new Bitmap (relativepath + @"\checker.jpg");
 			#else
-			Bitmap checker = new Bitmap (THEGODDAMNRELATIVEPATH + "/" + "checker.png");
+			Bitmap checker = new Bitmap (relativepath + "/" + "checker.png");
 			#endif 
 			
 			#if WINDOWS
-			tsphere.setTexture (new Bitmap (THEGODDAMNRELATIVEPATH + @"\dog.jpg"));
+			tsphere.setTexture (new Bitmap (relativepath + @"\dog.jpg"));
 			#else
-			tsphere.setTexture (new Bitmap (THEGODDAMNRELATIVEPATH + "/" + "dog.jpg"));
+			tsphere.setTexture (new Bitmap (relativepath + "/" + "dog.jpg"));
 			#endif
 			//vs.addPrim (tsphere);
 			//vs.addSphere (new Vector3d (-200, 0, 175), 90, Color.Gray, 0.5);
